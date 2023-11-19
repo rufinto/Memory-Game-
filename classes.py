@@ -54,7 +54,7 @@ class Level :
         self.nb_pairs = nb_pairs
         self.nb_row = nb_row
         self.nb_column = nb_column
-        self.timer = id*10
+        self.timer = id*15
         self.max_attempts = 3*nb_pairs
         
     def get_back_file(self):
@@ -91,8 +91,8 @@ class Game :
             grid.append(self.cards[i:i+nb_column])
         self.grid = grid
     
-    def is_finished(self): #ajouter un nombre d'essais max ?
-        return (self.matched_pairs is self.level.nb_pairs, self.attempts == self.level.max_attempts)
+    def is_finished(self): #jeu fini si toutes les paires sont trouvees ou bien nombre max d'essais atteint
+        return (self.matched_pairs is self.level.nb_pairs, self.attempts >= self.level.max_attempts)
 
 class Player:
     def __init__(self, name):

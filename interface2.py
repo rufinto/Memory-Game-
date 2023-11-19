@@ -45,7 +45,7 @@ def open_playing_window(game, window, bg, front_images):
     
     playing_window = tk.Toplevel(window)
     playing_window.title("Game")
-    playing_window.minsize(700,700)
+    playing_window.minsize(800,700)
     playing_window.config(bg = bg)
     
     can = create_grid(playing_window, 700, 700, bg, rows, columns)
@@ -61,13 +61,13 @@ def display_init_fronts(game, can : Canvas, playing_window, rows, columns, line_
             
     countdown_label = tk.Label(playing_window, text="", font=("Helvetica", 30))
     countdown_label.pack(fill="both", expand=True)
-    attempts_label = tk.Label(playing_window, text = "attempts", font=("Helvetica", 30))
+    attempts_label = tk.Label(playing_window, text = "", font=("Helvetica", 30))
     attempts_label.pack(fill="both", expand=True)
 
-    def display_result(result):
+    def display_result(result): #change la fenetre de jeu pour afficher game over or win 
         bg = '#C597FF'
         can.destroy()
-        playing_window.minsize(200,200)
+        playing_window.minsize(500,500)
         if (result == 0):
             create_label(playing_window, "GAME OVER", ("Tahoma",20), bg, 'white' )
         if (result == 1):
@@ -104,6 +104,10 @@ def display_init_fronts(game, can : Canvas, playing_window, rows, columns, line_
                         
     update_init_countdown(3) #on lance le decompte initiale
     can.bind("<Button-1>", lambda event : on_click(game, event, can, images_id, list, line_height, column_width, back_image, attempts_label )) #"<Button-1>" : clic bouton gauche
+    display_attempts(game, attempts_label)
+
+def display_attempts(game, attempts_label):
+    attempts_label.config(text = game.attempts)
     
 def on_click(game, event, can, images_id, list, line_height, column_width, back_image, attempts_label):
     
@@ -111,33 +115,36 @@ def on_click(game, event, can, images_id, list, line_height, column_width, back_
         x,y = event.x, event.y #coordonnes du click
         row = int(y)// line_height #ligne du click
         column = int(x)// column_width #colonne du click
-        return row, column
-    
-    def display_attempts():
-        attempts_label.config(text = game.attempts)
-    
-    display_attempts()
+        
+        #verifier si le joueur a bien clique sur l'image ou bien sur un espace vide :
+        center_x = column * column_width + column_width / 2
+        center_y = row * line_height + line_height / 2
+        if center_x - 113//2 <= x <= center_x + 113//2 and center_y - 170//2 <= y <= center_y + 170//2:
+            return row, column
+        else:
+            return None, None
+
     if (game.started == True) : 
         i, j = get_clicked_image(event, line_height, column_width)
-        if (i, j) == (None, None):
-            return
-        game.attempts += 1
-        card_id = game.grid[i][j]
-        card = Card.get_card_with_id(card_id)
+        if ( (i,j) != (None, None)):
+            game.attempts += 1
+            display_attempts(game, attempts_label)
+            card_id = game.grid[i][j]
+            card = Card.get_card_with_id(card_id)
 
-        if not card.flipped and card.id not in game.flipped:  # Vérifie si la carte n'est pas déjà retournée et n'est pas déjà appariée
-            card.flipped = True
-            game.flipped.append(card.id)
-            can.itemconfig(images_id[i][j], image=list[i][j])  # On affiche l'image
+            if not card.flipped and card.id not in game.flipped:  # Vérifie si la carte n'est pas déjà retournée et n'est pas déjà appariée
+                card.flipped = True
+                game.flipped.append(card.id)
+                can.itemconfig(images_id[i][j], image=list[i][j])  # On affiche l'image
 
-            if (len(game.flipped) % 2 == 0):
-                previous_try_id = game.flipped[-2]
-                previous_card = Card.get_card_with_id(previous_try_id)
+                if (len(game.flipped) % 2 == 0):
+                    previous_try_id = game.flipped[-2]
+                    previous_card = Card.get_card_with_id(previous_try_id)
 
-                if card.is_pair_of(previous_card) == False:
-                    can.after(1000, lambda: hide_unmatched_cards(game, can, images_id, card, previous_card, back_image))
-                else :
-                    game.matched_pairs += 1 #une paire en plus est trouvée 
+                    if card.is_pair_of(previous_card) == False:
+                        can.after(1000, lambda: hide_unmatched_cards(game, can, images_id, card, previous_card, back_image))
+                    else :
+                        game.matched_pairs += 1 #une paire en plus est trouvée 
 
 def hide_unmatched_cards(game, can, images_id, card, previous_card, back_image):
     i, j = get_card_position(game, card)
