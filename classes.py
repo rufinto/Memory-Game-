@@ -54,8 +54,9 @@ class Level :
         self.nb_pairs = nb_pairs
         self.nb_row = nb_row
         self.nb_column = nb_column
-        self.nb_cards = 2*nb_pairs
-    
+        self.timer = id*10
+        self.max_attempts = 3*nb_pairs
+        
     def get_back_file(self):
         return "back"+self.id+".png"
     
@@ -68,6 +69,7 @@ class Game :
         self.flipped = [] #liste des identifiants des cartes qui sont visibles
         self.matched_pairs = 0 #nombre de paires trouvés
         self.grid = [] #liste de listes avec les identifiants des cartes qui sont dans la grille
+        self.started = False
         self.init_game()
         self.init_grid()
         
@@ -90,7 +92,7 @@ class Game :
         self.grid = grid
     
     def is_finished(self): #ajouter un nombre d'essais max ?
-        return self.matched_pairs is self.level.nb_pairs
+        return (self.matched_pairs is self.level.nb_pairs, self.attempts == self.level.max_attempts)
 
 class Player:
     def __init__(self, name):
