@@ -63,9 +63,6 @@ class Level :
         self.nb_column = nb_column
         self.timer = id*10
         self.max_attempts = 3*nb_pairs
-        
-    def get_back_file(self):
-        return "back"+self.id+".png"
     
 class Game :
     def __init__(self, level : Level, theme):
