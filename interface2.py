@@ -5,19 +5,42 @@ from cards import get_card_position
 from cards import get_front_images
 from PIL import Image, ImageTk
 import time
+from game_over import game_over
+import pygame
 
+# Initialisation de pygame pour la gestion du son
+pygame.init()
 
-def create_window(title, color):
+# Chargement des sons
+sound_first_page = pygame.mixer.Sound("sound_first_page.mp3")
+sound_button_play = pygame.mixer.Sound("sound_button_play.mp3")
+sound_wrong_pair = pygame.mixer.Sound("sound_wrong_pair.mp3")
+sound_right_pair =pygame.mixer.Sound("sound_right_pair.mp3")
+
+def play_sound(sound):
+    pygame.mixer.Sound.play(sound)
+
+def create_window(title, color, bg_image_path):
     window = tk.Tk()
     window.minsize(500, 500)
     window.title(title)
-    window.config(bg=color)
+    
+    # Set window background color    
+    # Add background image
+    if bg_image_path:
+        bg_image = Image.open(bg_image_path)
+        bg_image = ImageTk.PhotoImage(bg_image)
+        bg_label = tk.Label(window, image=bg_image)
+        bg_label.place(relwidth=1, relheight=1)
+        bg_label.image = bg_image
+    
     return window
 
 
-def create_label(window, t, f, b, fgg):
-    title_label = tk.Label(window, text=t, font=f, bg=b, fg=fgg)
+def create_label(window, text, font, bg, fg):
+    title_label = tk.Label(window, text=text, font=font, bg=bg, fg=fg)
     title_label.pack(expand="yes")
+    return title_label  # Ajout de cette ligne pour retourner l'objet Label
 
 
 def create_frame(window, background, x, y, w, h):
@@ -41,11 +64,14 @@ def add_button(frame, text, font, bg, fg, command):
     frame.pack(expand="Yes")
 
 
-def open_playing_window(game, window, bg, front_images):
+def open_playing_window(game, window,fond, front_images):
+    # Jouer le son lors de l'ouverture de la fenêtre
+    play_sound(sound_first_page)
+
     rows = game.level.nb_row
     columns = game.level.nb_column
-    line_height = 700//rows  # hauteur de chaque ligne
-    column_width = 700//columns  # largeur de chaque colonne
+    line_height = 500//rows
+    column_width = 500//columns
 
     card = Card.get_card_with_id(game.cards[0])
     back_image = Image.open(card.back)
@@ -53,12 +79,11 @@ def open_playing_window(game, window, bg, front_images):
 
     playing_window = tk.Toplevel(window)
     playing_window.title("Game")
-    playing_window.minsize(700, 700)
-    playing_window.config(bg=bg)
+    playing_window.minsize(500, 500)
+    playing_window.config(bg=fond)
 
-    can = create_grid(playing_window, 700, 700, bg, rows, columns)
-    display_init_fronts(game=game, can=can, playing_window=playing_window, rows=rows, columns=columns,
-                        line_height=line_height, column_width=column_width, list=front_images, back_image=back_image)
+    can = create_grid(playing_window, 500, 500, fond, rows, columns)
+    display_init_fronts(game=game, can=can, playing_window=playing_window, rows=rows, columns=columns, line_height=line_height, column_width=column_width, list=front_images, back_image=back_image)
 
 
 # list est la liste des images en format Image
@@ -80,8 +105,8 @@ def display_init_fronts(game, can: Canvas, playing_window, rows, columns, line_h
     def display_result(result):
         bg = '#C597FF'
         can.destroy()
-        playing_window.minsize(500, 500)
-        game_over(result, playing_window)
+        playing_window.minsize(200, 200)
+        game_over(result)
         # playing_window.destroy()
 
     def update_init_countdown(seconds_left):
@@ -185,64 +210,22 @@ def create_grid(window, width, height, bg, rows, columns):  # creee un canva ave
 
 
 def display_main_game_interface(game):
-    bg = '#C597FF'
-    path = "3997691.png"
-    window = create_window("Memory Game", bg)
-    create_label(window, "MEMORY GAME", ("Tahoma", 40), bg, 'white')
-    image = Image.open(path)
-    image = ImageTk.PhotoImage(image)
-    create_icanva(window, bg, 250, 250, 250, 250, image)
-    frame = create_frame(window, bg, 400, 250, 5, 30)
+    bg = 'gray3'
+    window = create_window("Memory Game", bg_image_path="fond2.png")
+
+    # Place "MEMORY GAME" label at the top center
+    label_memory_game = create_label(window, "MEMORY GAME", ("Tahoma", 40),bg,'white')
+    label_memory_game.pack(side="bottom")
+
+    # Create a frame for the button to achieve centering
+    frame = create_frame(window, bg, 0, 0, 1, 1)
+    frame.pack(side="top")  # Center the frame
+
     front_images = get_front_images(game)
-    add_button(frame, "PLAY", font=("Tahoma", 20), bg=bg, fg='black',
-               command=lambda: open_playing_window(game, window, bg, front_images))
+    add_button(frame, "PLAY", font=("Impact", 40), bg=bg, fg='white', command=lambda: open_playing_window(game, window, bg, front_images))
     window.mainloop()
-
-
-def game_over(result: bool, fenetre):
-    if result:
-        image_path = "game_over_play_again.PNG"
-    else:
-        image_path = "game_over_play_again.PNG"
-
-    def on_image_click(event):
-        if event.x < 250:
-            main()
-        else:
-            close_all_windows()
-
-# Function to be called when the top part of the image is clicked
-# Main function to create the Tkinter GUI
-
-    def create_gui():
-        # Create the main window
-        # window = tk.Tk()
-        # window.title("Game Over")
-
-        # Load the image from the current directory
-        image = Image.open(image_path)
-
-        # Convert the image to Tkinter PhotoImage format
-        tk_image = ImageTk.PhotoImage(image)
-
-        # Create a canvas to display the image
-        canvas = tk.Canvas(fenetre, width=500, height=500)
-        canvas.pack()
-
-        # Display the image on the canvas
-        canvas.create_image(0, 0, anchor=tk.NW, image=tk_image)
-
-        # Bind click events on the canvas to the on_image_click function
-        canvas.bind("<Button-1>", on_image_click)
-
-        # Run the Tkinter main loop
-        fenetre.mainloop()
-
-    # Run the GUI
-    create_gui()
-
-
-def close_all_windows():
-    for fen in window.winfo_children():
-        if isinstance(fen, tk.Toplevel):
-            fen.destroy()
+    window.mainloop()
+if __name__ == "__main__":
+    # Vous pouvez ajouter ici le code pour ajouter du son lorsque le jeu est gagné
+    game = YourGameClass()  # Remplacez YourGameClass() par votre classe de jeu réelle
+    display_main_game_interface(game)
