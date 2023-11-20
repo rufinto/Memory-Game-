@@ -130,8 +130,28 @@ def special2(game, can, playing_window, countdown_label, attempts_label): #ajout
     new_timer = timer + 5
     update_countdown(game, can, playing_window, countdown_label2, attempts_label, new_timer)
 
-def special3(game):
-    game.grid = shuffle_cards(game)
+def special3(game, can, images_id, front_images): 
+    new_grid = shuffle_cards(game) #change la grille du jeu 
+    #reafficher toutes les cartes : il faut changer images_id
+    rows = game.level.nb_row
+    columns = game.level.nb_column
+    line_height = 700//rows  #hauteur de chaque ligne
+    column_width = 700//columns #largeur de chaque colonne
+    
+    new_images_id = []
+    new_front_images = []
+    
+    for l in new_grid :
+        new_images_id.append([0]*len(l))
+        new_front_images.append([0]*len(l))
+    for i in range(rows):
+        for j in range(columns):
+            new_id = new_grid[i][j] #identifiant de la carte a mettre en position i,j
+            k,l = get_card_position(game, new_id)
+            new_front_images[i][j] = front_images[k][l]
+            new_images_id[i][j] = can.create_image(j*column_width + column_width/2 , i*line_height + line_height/2, image = front_images[k][l])
+    game.grid = new_grid
+    return new_images_id, new_front_images
 
 def on_click(game, event, can, images_id, list, line_height, column_width, back_image, attempts_label, countdown_label, playing_window):
     
@@ -172,13 +192,13 @@ def on_click(game, event, can, images_id, list, line_height, column_width, back_
                     if (card.power == 2) :
                         special2(game, can, playing_window, countdown_label, attempts_label)
                     if (card.power == 3):
-                        special3(game)
+                        images_id, list = special3(game, can, images_id, list) #list est front_images
                     
 def hide_unmatched_cards(game, can, images_id, card, previous_card, back_image):
-    i, j = get_card_position(game, card)
+    i, j = get_card_position(game, card.id)
     can.itemconfig(images_id[i][j], image=back_image)  # Retourne la carte actuelle
 
-    k, l = get_card_position(game, previous_card)
+    k, l = get_card_position(game, previous_card.id)
     can.itemconfig(images_id[k][l], image=back_image)  # Retourne la carte précédente
 
     # Réinitialise les cartes dans la liste des cartes retournées
