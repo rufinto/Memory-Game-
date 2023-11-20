@@ -5,7 +5,6 @@ from cards import get_card_position
 from cards import get_front_images
 from PIL import Image, ImageTk
 import time
-from game_over import game_over
 import pygame
 
 # Initialisation de pygame pour la gestion du son
@@ -20,7 +19,7 @@ sound_right_pair =pygame.mixer.Sound("sound_right_pair.mp3")
 def play_sound(sound):
     pygame.mixer.Sound.play(sound)
 
-def create_window(title, color, bg_image_path):
+def create_window(title, bg_image_path):
     window = tk.Tk()
     window.minsize(500, 500)
     window.title(title)
@@ -102,12 +101,17 @@ def display_init_fronts(game, can: Canvas, playing_window, rows, columns, line_h
         playing_window, text="attempts", font=("Helvetica", 30))
     attempts_label.pack(fill="both", expand=True)
 
-    def display_result(result):
+    def display_result( result): #change la fenetre de jeu pour afficher game over or win 
         bg = '#C597FF'
-        can.destroy()
-        playing_window.minsize(200, 200)
-        game_over(result)
-        # playing_window.destroy()
+        
+        playing_window.minsize(500,500)
+        if (result == 0):
+            create_label(playing_window, "GAME OVER", ("Tahoma",20), bg, 'white' )
+        if (result == 1):
+            create_label(playing_window, "WELL DONE ! YOU WON THIS GAME", ("Tahoma",20), bg, 'white' )
+
+
+
 
     def update_init_countdown(seconds_left):
         countdown_label.config(text=str(seconds_left))
@@ -148,7 +152,7 @@ def display_init_fronts(game, can: Canvas, playing_window, rows, columns, line_h
 
 
 def on_click(game, event, can, images_id, list, line_height, column_width, back_image, attempts_label):
-
+    
     def get_clicked_image(event, line_height, column_width):
         x, y = event.x, event.y  # coordonnes du click
         row = int(y) // line_height  # ligne du click
@@ -179,10 +183,12 @@ def on_click(game, event, can, images_id, list, line_height, column_width, back_
                 previous_card = Card.get_card_with_id(previous_try_id)
 
                 if card.is_pair_of(previous_card) == False:
+                    play_sound(sound_wrong_pair)
                     can.after(1000, lambda: hide_unmatched_cards(
                         game, can, images_id, card, previous_card, back_image))
                 else:
-                    game.matched_pairs += 1  # une paire en plus est trouvée
+                    game.matched_pairs += 1 
+                    play_sound(sound_right_pair) # une paire en plus est trouvée
 
 
 def hide_unmatched_cards(game, can, images_id, card, previous_card, back_image):
@@ -207,6 +213,55 @@ def create_grid(window, width, height, bg, rows, columns):  # creee un canva ave
     can.grid(row=0, column=0, rowspan=rows, columnspan=columns)
     can.pack(expand='yes')
     return can
+
+
+# def game_over(result: bool, fenetre):
+#     if result:
+#         image_path = "game_over_play_again.PNG"
+#     else:
+#         image_path = "game_over_play_again.PNG"
+
+#     def on_image_click(event):
+#         if event.x < 250:
+#             main()
+#         else:
+#             close_all_windows()
+
+# # Function to be called when the top part of the image is clicked
+# # Main function to create the Tkinter GUI
+
+#     def create_gui():
+#         # Create the main window
+#         # window = tk.Tk()
+#         # window.title("Game Over")
+
+#         # Load the image from the current directory
+#         image = Image.open(image_path)
+
+#         # Convert the image to Tkinter PhotoImage format
+#         tk_image = ImageTk.PhotoImage(image)
+
+#         # Create a canvas to display the image
+#         canvas = tk.Canvas(fenetre, width=500, height=500)
+#         canvas.pack()
+
+#         # Display the image on the canvas
+#         canvas.create_image(0, 0, anchor=tk.NW, image=tk_image)
+
+#         # Bind click events on the canvas to the on_image_click function
+#         canvas.bind("<Button-1>", on_image_click)
+
+#         # Run the Tkinter main loop
+#         fenetre.mainloop()
+
+#     # Run the GUI
+#     create_gui()
+
+
+# def close_all_windows():
+#     for fen in window.winfo_children():
+#         if isinstance(fen, tk.Toplevel):
+#             fen.destroy()
 
 
 def display_main_game_interface(game):
