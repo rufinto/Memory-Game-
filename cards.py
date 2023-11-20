@@ -55,7 +55,7 @@ def get_front_images(game): #renvoie une liste de toutes les images face des car
     grid = game.grid
     for l in grid :
         front_images.append(['']*len(l))
-    nb_rows = game.level.nb_row
+    nb_rows = game.level.nb_row 
     nb_columns = game.level.nb_column
     for i in range(nb_rows):
         for j in range(nb_columns):
@@ -65,13 +65,13 @@ def get_front_images(game): #renvoie une liste de toutes les images face des car
             front_images[i][j] = front_image
     return front_images
 
-def get_card_position(game, id):
+def get_card_position(game, id : int) -> tuple : #return the row and the column in which the card is positioned 
     for i in range(game.level.nb_row):
         for j in range(game.level.nb_column):
             if (game.grid[i][j] == id) :
-                return i,j
+                return i,j 
 
-def shuffle_cards(game): #melange toutes les cartes
+def shuffle_cards(game): #shuffle all the cards
     grid = []
     cards = game.cards.copy()
     for l in game.grid :
