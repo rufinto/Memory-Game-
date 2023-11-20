@@ -1,0 +1,9 @@
+from Theme1 import *
+
+theme1_assos = {"Genius" : "Genius", "Forum" : "Forum", "Adr": "Adr", "CommuS": "CommuS", "Facs": "Facs", "BDE": "BDE", "BDI": "BDI", "JCS":"JCS", "Pics": "Pics", "Hyris": "Hyris", "Caccs": "Caccs", "Wacs": "Wacs", "Capese": "Capese", "Impact": "Impact", "Symposium": "Symposium", "Magnum": "Magnum", "oser":"oser", "Cheer'up": "Cheer'up", "Automatants": "Automatants", "BDS": "BDS", "Viarezo": "Viarezo", "Huma":"Huma", "Club tech": "Club tech", "c7": "c7", "SBCS":"SBCS", "FIR": "FIR", "WEI":"WEI"}
+theme1 = {"image1": "image1", "image2": "image2","image3": "image3","image4": "image4","image5": "image5","image": "image6","image7": "image7","image8": "image8","image9": "image9","image10": "image10","image11": "image12","image13": "image13","image14": "image14","image15": "image15","image16": "image16","image17": "image17", "image18": "image18", "image19": "image19", "image20": "image20", "image21": "image21" }
+
+theme2_persos = {"Barbie": "Ken", "Harry Potter": "Hermionne", "Tony Montana": "Helvira", "Jack Sparrow" : "Elizabeth Swann", "Boule": "Bill", "Tintin": "Milou", "Bonnie":"Clyde", "Rose":"Jack", "Mowgli": "Baloo", "Simba": "Scar", "Aladdin": "Jasmine", "Mario": "Luigi", "La belle": "Le clochard", "Blanche neige": "les 7 nains", "John Snow": "Daenerys Targaryen"}
+theme2 = {"image1": "image2", "image3": "image4","image5": "image6","image7": "image8","image9": "image10","image11": "image12","image13": "image14","image15": "image16","image17": "image18","image19": "image20","image21": "image22","image23": "image24","image25": "image26","image27": "image28","image29": "image30","image31": "image32","image33": "image34","image35": "image36","image37": "image38","image39": "image40","image41": "image42"}
+
+theme3 = {}
