@@ -1,18 +1,30 @@
 from classes import Card
 import tkinter as tk
 from PIL import Image, ImageTk
+import random as rd
 
 def create_all_cards():
     card = Card(0, None, None, None) #cree une carte identifié 0 juste pour pas avoir de degalage des nombres
+    back_image_path = "IMAGES/back1.png"
     for i in range(1, 21):
         front_image_path = "IMAGES/" + str(i) + ".png"
-        back_image_path = "IMAGES/back1.png"
         card = Card(id = i, front = front_image_path, back = back_image_path, theme =1)
-
     for i in range(41, 61):
         front_image_path = "IMAGES/" + str(i) + ".png"
-        back_image_path = "IMAGES/back1.png"
         card = Card(id = i, front = front_image_path, back = back_image_path, theme =1)
+    
+    back_image_path = "IMAGES/back1.png"
+    for i in range(21, 41):
+        front_image_path = "IMAGES/" + str(i) + ".png"
+        card = Card(id = i, front = front_image_path, back = back_image_path, theme =2)
+    for i in range(61, 83):
+        front_image_path = "IMAGES/" + str(i) + ".png"
+        card = Card(id = i, front = front_image_path, back = back_image_path, theme =2)
+
+    #theme 3 ?  
+    
+    #test carte speciale 1 :
+    card = Card(id = 100, front = "IMAGES/special1.png", back = back_image_path, theme =2, power = 1)
     
 def associate_all_pairs(theme):
     CARDS = Card.get_cards()
@@ -44,3 +56,16 @@ def get_card_position(game, card):
         for j in range(game.level.nb_column):
             if (game.grid[i][j] == card.id) :
                 return i,j
+
+def shuffle_cards(game): #melange toutes les cartes
+    grid = []
+    cards = game.card.copy()
+    for l in game.grid :
+        grid.append([0]*len(l))
+    for i in range(game.level.nb_rows):
+        for j in range(game.level.nb_columns):
+            id = rd.choice(cards)
+            grid[i][j] = id
+            cards.remove(id)
+    return grid
+                
