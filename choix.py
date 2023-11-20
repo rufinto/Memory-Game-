@@ -1,4 +1,5 @@
 import tkinter as tk
+from classes import *
 
 def choisir_theme(theme):
     print(f"Thème choisi : {theme}")
