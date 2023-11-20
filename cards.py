@@ -29,15 +29,15 @@ def create_all_cards():
     #test carte speciale 2 :
     card = Card(id = 100, front = "IMAGES/special1.png", back = back_image_path, theme =2, power = 3)
     
-def associate_all_pairs(theme):
-    CARDS = Card.get_cards()
-    THEMES = Card.get_themes()
-    pairs = THEMES[theme]
-    for (i,j) in pairs:
-        card1 = Card.get_card_with_id(i)
-        card2 = Card.get_card_with_id(j)
-        card1.pair = card2.id
-        card2.pair = card1.id
+def associate_all_pairs(theme) -> None :
+    CARDS = Card.get_cards() #we fetch the list of all the cards
+    THEMES = Card.get_themes() #we fetch the dictionary that cointains the themes 
+    pairs = THEMES[theme] #we only keep the list of tuples associated with the theme
+    for (i,j) in pairs: #for each pair
+        card1 = Card.get_card_with_id(i) #we fetch the id of the first card
+        card2 = Card.get_card_with_id(j) #we fetch the id of its pair
+        card1.pair = card2.id #the attribute None becomes the id of the pair 
+        card2.pair = card1.id 
 
 def get_front_images(game): #renvoie une liste de toutes les images face des cartes de la grille, meme indices que la grille
     front_images = []
