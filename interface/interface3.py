@@ -57,7 +57,7 @@ def add_button(frame, text, font, bg, fg, command):
     button.pack()
     
 
-def open_playing_window(game, window, bg, front_images):
+def open_playing_window(game, window,fond, front_images):
     # Jouer le son lors de l'ouverture de la fenêtre
     play_sound(sound_first_page)
 
@@ -73,9 +73,9 @@ def open_playing_window(game, window, bg, front_images):
     playing_window = tk.Toplevel(window)
     playing_window.title("Game")
     playing_window.minsize(500, 500)
-    playing_window.config(bg=bg)
+    playing_window.config(bg=fond)
 
-    can = create_grid(playing_window, 500, 500, bg, rows, columns)
+    can = create_grid(playing_window, 500, 500, fond, rows, columns)
     display_init_fronts(game=game, can=can, playing_window=playing_window, rows=rows, columns=columns, line_height=line_height, column_width=column_width, list=front_images, back_image=back_image)
 
 def display_init_fronts(game, can: Canvas, playing_window, rows, columns, line_height, column_width, list, back_image):
