@@ -37,7 +37,7 @@ class Card :
     #if power = 2 : the player has 10 secondes more to complete the game 
     #if power = 3 : we shuffle the cards
     #if power = 4 : we show the cards during 3 secondes (the timer is stopped meanwhile)
-    #if power = 5 : we return a pair
+    #if power = 5 : a pair is discovered
     
     def is_pair_of(self, card):
         return self.pair is card.id
