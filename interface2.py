@@ -5,7 +5,6 @@ from cards import get_card_position
 from cards import get_front_images
 from PIL import Image, ImageTk
 import time
-from game_over import game_over
 
 
 def create_window(title, color):
@@ -81,8 +80,8 @@ def display_init_fronts(game, can: Canvas, playing_window, rows, columns, line_h
     def display_result(result):
         bg = '#C597FF'
         can.destroy()
-        playing_window.minsize(200, 200)
-        game_over(result)
+        playing_window.minsize(500, 500)
+        game_over(result, playing_window)
         # playing_window.destroy()
 
     def update_init_countdown(seconds_left):
@@ -198,3 +197,52 @@ def display_main_game_interface(game):
     add_button(frame, "PLAY", font=("Tahoma", 20), bg=bg, fg='black',
                command=lambda: open_playing_window(game, window, bg, front_images))
     window.mainloop()
+
+
+def game_over(result: bool, fenetre):
+    if result:
+        image_path = "game_over_play_again.PNG"
+    else:
+        image_path = "game_over_play_again.PNG"
+
+    def on_image_click(event):
+        if event.x < 250:
+            main()
+        else:
+            close_all_windows()
+
+# Function to be called when the top part of the image is clicked
+# Main function to create the Tkinter GUI
+
+    def create_gui():
+        # Create the main window
+        # window = tk.Tk()
+        # window.title("Game Over")
+
+        # Load the image from the current directory
+        image = Image.open(image_path)
+
+        # Convert the image to Tkinter PhotoImage format
+        tk_image = ImageTk.PhotoImage(image)
+
+        # Create a canvas to display the image
+        canvas = tk.Canvas(fenetre, width=500, height=500)
+        canvas.pack()
+
+        # Display the image on the canvas
+        canvas.create_image(0, 0, anchor=tk.NW, image=tk_image)
+
+        # Bind click events on the canvas to the on_image_click function
+        canvas.bind("<Button-1>", on_image_click)
+
+        # Run the Tkinter main loop
+        fenetre.mainloop()
+
+    # Run the GUI
+    create_gui()
+
+
+def close_all_windows():
+    for fen in window.winfo_children():
+        if isinstance(fen, tk.Toplevel):
+            fen.destroy()
