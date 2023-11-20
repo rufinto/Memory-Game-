@@ -8,27 +8,34 @@ def create_all_cards():
     back_image_path = "IMAGES/back1.png"
     for i in range(1, 21):
         front_image_path = "IMAGES/" + str(i) + ".png"
-        card = Card(id = i, front = front_image_path, back = back_image_path, theme =1)
+        Card(id = i, front = front_image_path, back = back_image_path, theme = 1)
     for i in range(41, 61):
         front_image_path = "IMAGES/" + str(i) + ".png"
-        card = Card(id = i, front = front_image_path, back = back_image_path, theme =1)
+        Card(id = i, front = front_image_path, back = back_image_path, theme = 1)
     
     back_image_path = "IMAGES/back2.png"
     for i in range(21, 41):
         front_image_path = "IMAGES/" + str(i) + ".png"
-        card = Card(id = i, front = front_image_path, back = back_image_path, theme =2)
+        Card(id = i, front = front_image_path, back = back_image_path, theme = 2)
     for i in range(61, 83):
         front_image_path = "IMAGES/" + str(i) + ".png"
-        card = Card(id = i, front = front_image_path, back = back_image_path, theme =2)
-
+        Card(id = i, front = front_image_path, back = back_image_path, theme = 2)
+    for i in range(152, 174):
+        front_image_path = "IMAGES/" + str(i) + ".png"
+        Card(id = i, front = front_image_path, back = back_image_path, theme = 2)
+    
     back_image_path = "IMAGES/back3.png"
     for i in range(84, 150):
         front_image_path = "IMAGES/" + str(i) + ".png"
-        card = Card(id = i, front = front_image_path, back = back_image_path, theme =3)
+        Card(id = i, front = front_image_path, back = back_image_path, theme =3)
     
-    #test carte speciale 2 :
-    card = Card(id = 100, front = "IMAGES/special1.png", back = back_image_path, theme =2, power = 3)
-    
+    #création des cartes speciales :
+    Card(id = 200, front = "IMAGES/power1.png", back = '', theme = 0, power = 1)
+    Card(id = 201, front = "IMAGES/power2.png", back = '', theme = 0, power = 2)
+    Card(id = 202, front = "IMAGES/power3.png", back = '', theme = 0, power = 3)
+    Card(id = 203, front = "IMAGES/power4.png", back = '', theme = 0, power = 4)
+    Card(id = 204, front = "IMAGES/power5.png", back = '', theme = 0, power = 5)
+
 def associate_all_pairs(theme) -> None :
     CARDS = Card.get_cards() #we fetch the list of all the cards
     THEMES = Card.get_themes() #we fetch the dictionary that cointains the themes 
@@ -71,4 +78,3 @@ def shuffle_cards(game): #melange toutes les cartes
             grid[i][j] = id
             cards.remove(id)
     return grid
-                

@@ -14,15 +14,15 @@ def init_player_and_game():
         game = Game(level, theme)
         return player, game
     elif id_level == 2 :
-        level = Level(id = 2, nb_pairs = 8, nb_row = 4, nb_column = 4)
+        level = Level(id = 2, nb_pairs = 7, nb_row = 4, nb_column = 4)
         game = Game(level, theme)
         return player, game
     elif id_level == 3 :
-        level = Level(id = 3, nb_pairs = 10, nb_row = 4, nb_column = 5)
+        level = Level(id = 3, nb_pairs = 9, nb_row = 4, nb_column = 5)
         game = Game(level, theme)
         return player, game
     elif id_level == 4 :
-        level = Level(id = 4, nb_pairs = 12, nb_row = 4, nb_column = 6)
+        level = Level(id = 4, nb_pairs = 10, nb_row = 4, nb_column = 6)
         game = Game(level, theme)
         return player, game
 

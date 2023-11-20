@@ -12,7 +12,7 @@ class Card :
     2: [
         (21, 77), (22, 39), (23, 72), (24, 38), (25, 61), (26, 64), (27, 32), 
         (28, 34), (29, 33), (30, 31), (35, 36), (37, 71), (40, 62), (63, 70), 
-        (65, 69), (66, 67), (68, 82), (73, 78), (74, 76), (75, 80), (79, 81)
+        (65, 69), (66, 67), (68, 82), (73, 78), (74, 76), (75, 80), (79, 81), (152, 153), (154, 155), (156, 157), (158, 159), (160, 169), (161, 163), (162, 164), (165, 166), (167, 168), (170, 171), (172, 173) 
     ], 
     3: [
         (84, 85), (86, 87), (88, 89), (90, 91), (92, 93), (94, 95), (96, 97), (98, 99), (100, 101), 
@@ -62,6 +62,12 @@ class Card :
     def get_themes(cls):
         return cls.THEMES
     
+    @classmethod
+    def choose_special_cards(cls, number):
+        special_cards_id = [200, 201]
+        #special_cards_id = [200, 201, 202, 203, 204]
+        return rd.sample(special_cards_id, number)
+    
 class Level :
     def __init__(self, id, nb_pairs, nb_row, nb_column):
         self.id = id
@@ -76,12 +82,14 @@ class Game :
         self.level = level
         self.theme = theme
         self.cards = [] #liste des identifiants des cartes dans la game
+        self.special_cards = []
         self.attempts = 0
         self.flipped = [] #liste des identifiants des cartes qui sont visibles
         self.matched_pairs = 0 #nombre de paires trouvés
         self.grid = [] #liste de listes avec les identifiants des cartes qui sont dans la grille
         self.started = False
         self.init_game()
+        self.init_special_cards()
         self.init_grid()
         
     def init_game(self):
@@ -101,9 +109,32 @@ class Game :
         for i in range(0,(nb_row-1)*nb_column + 1, nb_column ):
             grid.append(self.cards[i:i+nb_column])
         self.grid = grid
+        self.init_special_cards
     
+    def init_special_cards(self):
+        back = self.get_back()
+        if (self.level.id == 2 or self.level.id == 3):
+            self.special_cards = Card.choose_special_cards(2)
+            for id in self.special_cards :
+                self.cards.append(id) #on ajoute la carte speciale aux cartes de la partie
+                card = Card.get_card_with_id(id)
+                card.back = back
+                card.theme = self.theme
+                self.cards.append(card.id)
+        elif (self.level.id == 4):
+            self.special_cards = Card.choose_special_cards(4)
+            for id in self.special_cards :
+                self.cards.append(id) #on ajoute la carte speciale aux cartes de la partie
+                card = Card.get_card_with_id(id)
+                card.back = back
+                card.theme = self.theme
+                self.cards.append(card.id)
+        
     def is_finished(self): #jeu fini si toutes les paires sont trouvees ou bien nombre max d'essais atteint
         return (self.matched_pairs is self.level.nb_pairs, self.attempts >= self.level.max_attempts)
+
+    def get_back(self):
+        return "IMAGES/back" + str(self.level.id) + ".png"
 
 class Player:
     def __init__(self, name):

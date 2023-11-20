@@ -53,7 +53,7 @@ def open_playing_window(game, window, bg, front_images):
     can = create_grid(playing_window, 700, 700, bg, rows, columns)
     display_init_fronts(game = game, can = can, playing_window = playing_window, rows = rows, columns = columns, line_height = line_height, column_width = column_width, list = front_images, back_image = back_image)    
     
-def display_init_fronts(game, can : Canvas, playing_window, rows, columns, line_height, column_width, list, back_image): #list est la liste des images en format Image
+def display_init_fronts(game, can : Canvas, playing_window, rows, columns, line_height, column_width, list, back_image, init_time = 3): #list est la liste des images en format Image
     images_id = []
     for l in list :
         images_id.append(['']*len(l))
@@ -122,17 +122,17 @@ def special1(game, can, playing_window, countdown_label, attempts_label): #retir
     else :
         update_countdown(game, can, playing_window, countdown_label2, attempts_label, new_timer)
 
-def special2(game, can, playing_window, countdown_label, attempts_label): #ajoute 5s au chrono
+def special2(game, can, playing_window, countdown_label, attempts_label): #ajoute 10s au chrono
     timer = int(countdown_label.cget("text"))
     countdown_label.destroy()
     countdown_label2 = tk.Label(playing_window, text="", font=("Helvetica", 20))
     countdown_label2.pack(fill = "both", expand = True)
-    new_timer = timer + 5
+    new_timer = timer + 10
     update_countdown(game, can, playing_window, countdown_label2, attempts_label, new_timer)
 
-def special3(game, can, images_id, front_images): 
+def special3(game, can, playing_window, images_id, front_images, countdown_label, attempts_label, back_image): 
     new_grid = shuffle_cards(game) #change la grille du jeu 
-    #reafficher toutes les cartes : il faut changer images_id
+    #reafficher toutes les cartes : il faut changer images_id et front_images
     rows = game.level.nb_row
     columns = game.level.nb_column
     line_height = 700//rows  #hauteur de chaque ligne
@@ -151,6 +151,7 @@ def special3(game, can, images_id, front_images):
             new_front_images[i][j] = front_images[k][l]
             new_images_id[i][j] = can.create_image(j*column_width + column_width/2 , i*line_height + line_height/2, image = front_images[k][l])
     game.grid = new_grid
+    update_init_countdown(game, can , playing_window, countdown_label, attempts_label, 3, new_images_id, back_image)
     return new_images_id, new_front_images
 
 def on_click(game, event, can, images_id, list, line_height, column_width, back_image, attempts_label, countdown_label, playing_window):
@@ -192,7 +193,7 @@ def on_click(game, event, can, images_id, list, line_height, column_width, back_
                     if (card.power == 2) :
                         special2(game, can, playing_window, countdown_label, attempts_label)
                     if (card.power == 3):
-                        images_id, list = special3(game, can, images_id, list) #list est front_images
+                        special3(game, can, playing_window, images_id, list, countdown_label, attempts_label, back_image ) #list est front_images
                     
 def hide_unmatched_cards(game, can, images_id, card, previous_card, back_image):
     i, j = get_card_position(game, card.id)
