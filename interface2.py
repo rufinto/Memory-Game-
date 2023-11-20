@@ -19,7 +19,10 @@ sound_right_pair =pygame.mixer.Sound("sound_right_pair.mp3")
 def play_sound(sound):
     pygame.mixer.Sound.play(sound)
 
+window=None
+
 def create_window(title, bg_image_path):
+    global window
     window = tk.Tk()
     window.minsize(500, 500)
     window.title(title)
@@ -103,12 +106,9 @@ def display_init_fronts(game, can: Canvas, playing_window, rows, columns, line_h
 
     def display_result( result): #change la fenetre de jeu pour afficher game over or win 
         bg = '#C597FF'
-        
+        can.destroy()
         playing_window.minsize(500,500)
-        if (result == 0):
-            create_label(playing_window, "GAME OVER", ("Tahoma",20), bg, 'white' )
-        if (result == 1):
-            create_label(playing_window, "WELL DONE ! YOU WON THIS GAME", ("Tahoma",20), bg, 'white' )
+        game_over(result, playing_window)
 
 
 
@@ -215,53 +215,53 @@ def create_grid(window, width, height, bg, rows, columns):  # creee un canva ave
     return can
 
 
-# def game_over(result: bool, fenetre):
-#     if result:
-#         image_path = "game_over_play_again.PNG"
-#     else:
-#         image_path = "game_over_play_again.PNG"
+def game_over(result: bool, fenetre):
+    if result:
+        image_path = "game_over_play_again.PNG"
+    else:
+        image_path = "game_over_play_again.PNG"
 
-#     def on_image_click(event):
-#         if event.x < 250:
-#             main()
-#         else:
-#             close_all_windows()
+    def on_image_click(event):
+        if event.x < 250:
+            main() #la fonctionn qui redemande la difficulté et le thème afin de relancer une nouvelle partie
+        else:
+            close_all_windows() #la fonction qui ferme le jeu complètement. Pour l'instant on ne ferme que la fenêtre de jeu
 
-# # Function to be called when the top part of the image is clicked
-# # Main function to create the Tkinter GUI
+# Function to be called when the top part of the image is clicked
+# Main function to create the Tkinter GUI
 
-#     def create_gui():
-#         # Create the main window
-#         # window = tk.Tk()
-#         # window.title("Game Over")
+    def create_gui():
+        # Create the main window
+        # window = tk.Tk()
+        # window.title("Game Over")
 
-#         # Load the image from the current directory
-#         image = Image.open(image_path)
+        # Load the image from the current directory
+        image = Image.open(image_path)
 
-#         # Convert the image to Tkinter PhotoImage format
-#         tk_image = ImageTk.PhotoImage(image)
+        # Convert the image to Tkinter PhotoImage format
+        tk_image = ImageTk.PhotoImage(image)
 
-#         # Create a canvas to display the image
-#         canvas = tk.Canvas(fenetre, width=500, height=500)
-#         canvas.pack()
+        # Create a canvas to display the image
+        canvas = tk.Canvas(fenetre, width=500, height=500)
+        canvas.pack()
 
-#         # Display the image on the canvas
-#         canvas.create_image(0, 0, anchor=tk.NW, image=tk_image)
+        # Display the image on the canvas
+        canvas.create_image(0, 0, anchor=tk.NW, image=tk_image)
 
-#         # Bind click events on the canvas to the on_image_click function
-#         canvas.bind("<Button-1>", on_image_click)
+        # Bind click events on the canvas to the on_image_click function
+        canvas.bind("<Button-1>", on_image_click)
 
-#         # Run the Tkinter main loop
-#         fenetre.mainloop()
+        # Run the Tkinter main loop
+        fenetre.mainloop()
 
-#     # Run the GUI
-#     create_gui()
+    # Run the GUI
+    create_gui()
 
 
-# def close_all_windows():
-#     for fen in window.winfo_children():
-#         if isinstance(fen, tk.Toplevel):
-#             fen.destroy()
+def close_all_windows():
+    for fen in window.winfo_children():
+        if isinstance(fen, tk.Toplevel):
+            fen.destroy()
 
 
 def display_main_game_interface(game):
@@ -277,8 +277,9 @@ def display_main_game_interface(game):
     frame.pack(side="top")  # Center the frame
 
     front_images = get_front_images(game)
-    add_button(frame, "PLAY", font=("Impact", 40), bg=bg, fg='white', command=lambda: open_playing_window(game, window, bg, front_images))
-    window.mainloop()
+    add_button(frame, "PLAY", font=("Impact", 40), bg='black', fg='white', command=lambda: open_playing_window(game, window, bg, front_images))
+    
+    window.wm_attributes('-transparentcolor','black')
     window.mainloop()
 if __name__ == "__main__":
     # Vous pouvez ajouter ici le code pour ajouter du son lorsque le jeu est gagné
