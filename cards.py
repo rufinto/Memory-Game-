@@ -5,6 +5,8 @@ import random as rd
 
 def create_all_cards():
     card = Card(0, None, None, None) #cree une carte identifié 0 juste pour pas avoir de degalage des nombres
+    
+    #creation of cards for theme 1
     back_image_path = "IMAGES/back1.png"
     for i in range(1, 21):
         front_image_path = "IMAGES/" + str(i) + ".png"
@@ -13,6 +15,7 @@ def create_all_cards():
         front_image_path = "IMAGES/" + str(i) + ".png"
         Card(id = i, front = front_image_path, back = back_image_path, theme = 1)
     
+    #creation of cards for theme 2
     back_image_path = "IMAGES/back2.png"
     for i in range(21, 41):
         front_image_path = "IMAGES/" + str(i) + ".png"
@@ -24,12 +27,13 @@ def create_all_cards():
         front_image_path = "IMAGES/" + str(i) + ".png"
         Card(id = i, front = front_image_path, back = back_image_path, theme = 2)
     
+    #creation of cards for theme 3
     back_image_path = "IMAGES/back3.png"
     for i in range(84, 150):
         front_image_path = "IMAGES/" + str(i) + ".png"
         Card(id = i, front = front_image_path, back = back_image_path, theme =3)
     
-    #création des cartes speciales :
+    #creation of special cards
     Card(id = 200, front = "IMAGES/power1.png", back = '', theme = 0, power = 1)
     Card(id = 201, front = "IMAGES/power2.png", back = '', theme = 0, power = 2)
     Card(id = 202, front = "IMAGES/power3.png", back = '', theme = 0, power = 3)
@@ -38,7 +42,7 @@ def create_all_cards():
 
 def associate_all_pairs(theme) -> None :
     CARDS = Card.get_cards() #we fetch the list of all the cards
-    THEMES = Card.get_themes() #we fetch the dictionary that cointains the themes 
+    THEMES = Card.get_themes() #we fetch the dictionary that contains the themes 
     pairs = THEMES[theme] #we only keep the list of tuples associated with the theme
     for (i,j) in pairs: #for each pair
         card1 = Card.get_card_with_id(i) #we fetch the id of the first card
