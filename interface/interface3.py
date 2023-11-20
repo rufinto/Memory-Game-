@@ -18,7 +18,7 @@ sound_right_pair =pygame.mixer.Sound("sound_right_pair.mp3")
 def play_sound(sound):
     pygame.mixer.Sound.play(sound)
 
-def create_window(title, color, bg_image_path):
+def create_window(title, bg_image_path):
     window = tk.Tk()
     window.minsize(500, 500)
     window.title(title)
@@ -35,8 +35,8 @@ def create_window(title, color, bg_image_path):
     return window
 
 
-def create_label(window, text, font, bg, fg):
-    title_label = tk.Label(window, text=text, font=font, bg=bg, fg=fg)
+def create_label(window, text, font,bg, fg):
+    title_label = tk.Label(window, text=text, font=font,bg=bg, fg=fg)
     title_label.pack(expand="yes")
     return title_label  # Ajout de cette ligne pour retourner l'objet Label
 
@@ -152,16 +152,16 @@ def create_grid(window, width, height, bg, rows, columns):
     return can
 
 def display_main_game_interface(game):
-    bg = 'mediumvioletred'
-    window = create_window("Memory Game", color="black", bg_image_path="fond2.png")
+    bg = 'gray3'
+    window = create_window("Memory Game", bg_image_path="fond2.png")
 
     # Place "MEMORY GAME" label at the top center
-    label_memory_game = create_label(window, "MEMORY GAME", ("Tahoma", 40), bg, 'white')
-    label_memory_game.grid(row=0, column=0, columnspan=3, pady=(10, 0))
+    label_memory_game = create_label(window, "MEMORY GAME", ("Tahoma", 40),bg,'white')
+    label_memory_game.pack(side="bottom")
 
     # Create a frame for the button to achieve centering
     frame = create_frame(window, bg, 0, 0, 1, 1)
-    frame.grid(row=1, column=0, pady=20)  # Center the frame
+    frame.pack(side="top")  # Center the frame
 
     front_images = get_front_images(game)
     add_button(frame, "PLAY", font=("Impact", 40), bg=bg, fg='white', command=lambda: open_playing_window(game, window, bg, front_images))
