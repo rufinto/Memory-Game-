@@ -35,6 +35,7 @@ def add_button(frame, text, font, bg, fg, command):
     button = tk.Button(frame, text = text,font=font, bg=bg, fg=fg, command = command)
     button.pack()
     frame.pack(expand="Yes")
+    print("========ok boutton")
 
 def open_playing_window(game, window, bg, front_images):
 
@@ -87,7 +88,7 @@ def display_result(game, can, playing_window, result): #change la fenetre de jeu
         create_label(playing_window, "WELL DONE ! YOU WON THIS GAME", ("Tahoma",20), bg, 'white' )
     add_button(frame, "PLAY AGAIN", font=("Tahoma",20), bg=bg, fg='black', command = lambda : display_main_game_interface(game))
     add_button(frame, "QUIT", font=("Tahoma",20), bg=bg, fg='black', command = lambda : window_variables[0].destroy())    
-
+    
 def update_init_countdown(game, can, playing_window, countdown_label, attempts_label, seconds_left, images_id, back_image):
     countdown_label.config(text=str(seconds_left))
     if seconds_left > 0:
@@ -267,6 +268,8 @@ def create_grid(window, width, height, bg, rows, columns): #creee un canva avec 
     return can
 
 def display_main_game_interface(game):
+    if (len(window_variables) > 0):
+        window_variables[0].destroy()
     bg = '#C597FF'
     path = "3997691.png"
     window = create_window("Memory Game", bg)
