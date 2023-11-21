@@ -7,6 +7,8 @@ from cards import get_front_images
 from cards import shuffle_cards
 from PIL import Image, ImageTk
 
+window_variables = []
+
 def create_window( title, color):
     window = tk.Tk()
     window.minsize(500,500)
@@ -46,14 +48,23 @@ def open_playing_window(game, window, bg, front_images):
     back_image = ImageTk.PhotoImage(back_image)
     
     playing_window = tk.Toplevel(window)
+    window_variables.append(playing_window)
     playing_window.title("Game")
     playing_window.minsize(700,700)
     playing_window.config(bg = bg)
     
     can = create_grid(playing_window, 700, 700, bg, rows, columns)
-    display_init_fronts(game = game, can = can, playing_window = playing_window, rows = rows, columns = columns, line_height = line_height, column_width = column_width, list = front_images, back_image = back_image)    
     
-def display_init_fronts(game, can : Canvas, playing_window, rows, columns, line_height, column_width, list, back_image, init_time = 3): #list est la liste des images en format Image
+    attempts_label = tk.Label(playing_window, text="", font=("Helvetica", 20))
+    window_variables.append(attempts_label)
+    attempts_label.pack(fill = "both", expand=True)     
+    countdown_label = tk.Label(playing_window, text="", font=("Helvetica", 20))
+    window_variables.append(countdown_label)
+    countdown_label.pack(fill = "both", expand=True)
+    
+    display_init_fronts(game = game, can = can, playing_window = playing_window, rows = rows, columns = columns, line_height = line_height, column_width = column_width, list = front_images, back_image = back_image, countdown_label = countdown_label, attempts_label = attempts_label )    
+    
+def display_init_fronts(game, can : Canvas, playing_window, rows, columns, line_height, column_width, list, back_image, countdown_label, attempts_label  ): #list est la liste des images en format Image
     images_id = []
     for l in list :
         images_id.append(['']*len(l))
@@ -61,24 +72,22 @@ def display_init_fronts(game, can : Canvas, playing_window, rows, columns, line_
         for j in range(columns):
             images_id[i][j] = can.create_image(j*column_width + column_width/2 , i*line_height + line_height/2, image = list[i][j])
        
-    attempts_label = tk.Label(playing_window, text="", font=("Helvetica", 20))
-    attempts_label.pack(fill = "both", expand=True)     
-    countdown_label = tk.Label(playing_window, text="", font=("Helvetica", 20))
-    countdown_label.pack(fill = "both", expand=True)
     update_init_countdown(game, can, playing_window, countdown_label, attempts_label,  3, images_id, back_image) #on lance le decompte initiale
     can.bind("<Button-1>", lambda event : on_click(game, event, can, images_id, list, line_height, column_width, back_image, attempts_label, countdown_label, playing_window )) #"<Button-1>" : clic bouton gauche
     display_attempts(game, attempts_label)
     
-def display_result(can, playing_window, result): #change la fenetre de jeu pour afficher game over or win 
+def display_result(game, can, playing_window, result): #change la fenetre de jeu pour afficher game over or win 
     bg = '#C597FF'
     can.destroy()
     playing_window.minsize(500,500)
+    frame = create_frame(playing_window, bg, 300, 400, 100, 200)
     if (result == 0):
         create_label(playing_window, "GAME OVER", ("Tahoma",20), bg, 'white' )
     if (result == 1):
         create_label(playing_window, "WELL DONE ! YOU WON THIS GAME", ("Tahoma",20), bg, 'white' )
-    #playing_window.destroy()
-        
+    add_button(frame, "PLAY AGAIN", font=("Tahoma",20), bg=bg, fg='black', command = lambda : display_main_game_interface(game))
+    add_button(frame, "QUIT", font=("Tahoma",20), bg=bg, fg='black', command = lambda : window_variables[0].destroy())    
+
 def update_init_countdown(game, can, playing_window, countdown_label, attempts_label, seconds_left, images_id, back_image):
     countdown_label.config(text=str(seconds_left))
     if seconds_left > 0:
@@ -98,39 +107,55 @@ def update_countdown(game, can, playing_window, countdown_label, attempts_label,
         elif (seconds_left <= 0 and game.is_finished() == (False, False)): #temps fini et tjrs pas trouve ttes les paires
             countdown_label.pack_forget() # on masque le label du chrono
             attempts_label.pack_forget()
-            display_result(can, playing_window, 0) #0 : le joueur a perdu
+            display_result(game, can, playing_window, 0) #0 : le joueur a perdu
         elif (seconds_left >0 and game.is_finished() == (False, True)) : #trop d'essais 
             countdown_label.pack_forget() # on masque le label du chrono
             attempts_label.pack_forget()
-            display_result(can, playing_window,0) #0 : le joueur a perdu
+            display_result(game, can, playing_window,0) #0 : le joueur a perdu
         elif (seconds_left >= 0 and game.is_finished() == (True, False)): #fini dans les temps et avec bon nombre d'essais
             countdown_label.pack_forget() # on masque le label du chrono
             attempts_label.pack_forget()
-            display_result(can, playing_window, 1) #1 : le joueur a gagne
+            display_result(game, can, playing_window, 1) #1 : le joueur a gagne
 
 def display_attempts(game, attempts_label):
-    attempts_label.config(text = game.attempts)
+    attempts_label.config(text = game.level.max_attempts - game.attempts)
 
-def special1(game, can, playing_window, countdown_label, attempts_label): #retire 5s au chrono
-    timer = int(countdown_label.cget("text"))
-    countdown_label.destroy()
-    countdown_label2 = tk.Label(playing_window, text="", font=("Helvetica", 20))
-    countdown_label2.pack(fill = "both", expand = True)
-    new_timer = timer - 5
-    if (new_timer <= 0):
-        update_countdown(game, can, playing_window, countdown_label2, attempts_label, 0)
-    else :
-        update_countdown(game, can, playing_window, countdown_label2, attempts_label, new_timer)
+def special1_2(game, can, playing_window, countdown_label, attempts_label, i):
+    
+    def special2(playing_window, countdown_label): #retire 5s au chrono
+        if countdown_label.winfo_exists():  # Vérifie si le label existe encore
+            timer = int(countdown_label.cget("text"))
+            countdown_label.destroy()
+            countdown_label2 = tk.Label(playing_window, text="", font=("Helvetica", 20))
+            countdown_label2.pack(fill = "both", expand = True)
+            new_timer = timer - 5
+            if (new_timer <= 0):
+                return (countdown_label2, 0)      
+            else :
+                return (countdown_label2, new_timer)
+        else :
+            return None, None
 
-def special2(game, can, playing_window, countdown_label, attempts_label): #ajoute 10s au chrono
-    timer = int(countdown_label.cget("text"))
-    countdown_label.destroy()
-    countdown_label2 = tk.Label(playing_window, text="", font=("Helvetica", 20))
-    countdown_label2.pack(fill = "both", expand = True)
-    new_timer = timer + 10
-    update_countdown(game, can, playing_window, countdown_label2, attempts_label, new_timer)
+    def special1(playing_window, countdown_label): #ajoute 10s au chrono
+        if countdown_label.winfo_exists():  # Vérifie si le label existe encore
+            timer = int(countdown_label.cget("text"))
+            countdown_label.destroy()
+            countdown_label2 = tk.Label(playing_window, text="", font=("Helvetica", 20))
+            countdown_label2.pack(fill = "both", expand = True)
+            new_timer = timer + 10
+            return (countdown_label2, new_timer)
+        else :
+            return None, None
+        
+    if (i == 1) :
+        countdown_label, new_timer = special1(playing_window, countdown_label)
+    elif (i == 2) :
+        countdown_label, new_timer = special2(playing_window, countdown_label)
+    if (countdown_label, new_timer) != (None, None) :
+        update_countdown(game, can, playing_window, countdown_label, attempts_label, new_timer)
+    return countdown_label
 
-def special3(game, can, playing_window, images_id, front_images, countdown_label, attempts_label, back_image): 
+def special4(game, can, playing_window, images_id, front_images, countdown_label, attempts_label, back_image): 
     new_grid = shuffle_cards(game) #change la grille du jeu 
     #reafficher toutes les cartes : il faut changer images_id et front_images
     rows = game.level.nb_row
@@ -154,8 +179,23 @@ def special3(game, can, playing_window, images_id, front_images, countdown_label
     update_init_countdown(game, can , playing_window, countdown_label, attempts_label, 3, new_images_id, back_image)
     return new_images_id, new_front_images
 
+def special3(game, can, images_id, list):
+    for (i,j) in Card.THEMES[game.theme] :
+        if i in game.cards and i not in game.flipped:
+            k,l = get_card_position(game, i)
+            card1 = Card.get_card_with_id(i)
+            card1.flipped = True
+            can.itemconfig(images_id[k][l], image=list[k][l])
+            m,n = get_card_position(game, j)
+            card2 = Card.get_card_with_id(j)
+            card2.flipped = True
+            can.itemconfig(images_id[m][n], image=list[m][n])
+            game.matched_pairs += 1
+            game.flipped.append(i)
+            game.flipped.append(j)
+            return i,j
+
 def on_click(game, event, can, images_id, list, line_height, column_width, back_image, attempts_label, countdown_label, playing_window):
-    
     def get_clicked_image(event, line_height, column_width):
         x,y = event.x, event.y #coordonnes du click
         row = int(y)// line_height #ligne du click
@@ -179,22 +219,33 @@ def on_click(game, event, can, images_id, list, line_height, column_width, back_
                 card.flipped = True
                 can.itemconfig(images_id[i][j], image=list[i][j])  # On affiche l'image
                 if (card.power == 0):
-                    game.flipped.append(card.id)
-                    if (len(game.flipped) % 2 == 0):
+                    game.flipped.append(card.id) #on met pas les cartes speciales dans flipped à part la 3
+                    if ((len(game.flipped) % 2 == 0 and 202 not in game.flipped)):
                         previous_try_id = game.flipped[-2]
+                        previous_card = Card.get_card_with_id(previous_try_id)
+                        if card.is_pair_of(previous_card) == False:
+                            can.after(1000, lambda: hide_unmatched_cards(game, can, images_id, card, previous_card, back_image))
+                        else :
+                            game.matched_pairs += 1 #une paire en plus est trouvée                        
+                    elif (202 in game.flipped and len(game.flipped) % 2 == 0) : #cas ou on avait deja une paire
+                        game.flipped.remove(202) #on enleve la carte spe 3
+                    elif (202 in game.flipped and (len(game.flipped) -1 ) % 2 == 0) : #cas ou on avait pas deja une paire
+                        game.flipped.remove(202) #on enleve la carte spe 3
+                        previous_try_id = game.flipped[-4] #on prend pas la paire ajoutée
                         previous_card = Card.get_card_with_id(previous_try_id)
                         if card.is_pair_of(previous_card) == False:
                             can.after(1000, lambda: hide_unmatched_cards(game, can, images_id, card, previous_card, back_image))
                         else :
                             game.matched_pairs += 1 #une paire en plus est trouvée
                 else :
-                    if (card.power == 1) :
-                        special1(game, can, playing_window, countdown_label, attempts_label)
-                    if (card.power == 2) :
-                        special2(game, can, playing_window, countdown_label, attempts_label)
+                    if card.power == 1:
+                        window_variables[3] = special1_2(game, can, playing_window, countdown_label, attempts_label, 1)
+                    elif card.power == 2:
+                        window_variables[3] = special1_2(game, can, playing_window, countdown_label, attempts_label, 2)
                     if (card.power == 3):
-                        special3(game, can, playing_window, images_id, list, countdown_label, attempts_label, back_image ) #list est front_images
-                    
+                        game.flipped.append(card.id) 
+                        special3(game, can, images_id, list)
+                        
 def hide_unmatched_cards(game, can, images_id, card, previous_card, back_image):
     i, j = get_card_position(game, card.id)
     can.itemconfig(images_id[i][j], image=back_image)  # Retourne la carte actuelle
@@ -219,6 +270,7 @@ def display_main_game_interface(game):
     bg = '#C597FF'
     path = "3997691.png"
     window = create_window("Memory Game", bg)
+    window_variables.append(window)
     create_label (window,"MEMORY GAME", ("Tahoma",40), bg, 'white')
     image = Image.open(path)
     image = ImageTk.PhotoImage(image)
@@ -227,3 +279,5 @@ def display_main_game_interface(game):
     front_images = get_front_images(game)
     add_button(frame, "PLAY", font=("Tahoma",20), bg=bg, fg='black', command = lambda : open_playing_window(game, window, bg, front_images))
     window.mainloop()
+    
+    
