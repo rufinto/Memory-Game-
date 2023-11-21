@@ -60,22 +60,21 @@ def open_parameters_window():
         elif id_level_var.get() == 4:
             level = Level(id = 4, nb_pairs = 10, nb_row = 4, nb_column = 6)
         def init_globale():
-            game = Game(level,theme_var.get())
-            return game
+            theme = theme_var.get()
+            game = Game(level,theme)
+            return(game)
         theme_window = create_window('Select a theme','light blue')
         theme_var = tk.IntVar()
         tk.Label(theme_window, text = 'Select theme', justify = tk.LEFT).pack()
         tk.Radiobutton(theme_window,text = "assos CS",value=1,variable=theme_var,command=init_globale).pack(anchor=tk.W)
         tk.Radiobutton(theme_window,text = "duos iconiques",value=2,variable=theme_var,command=init_globale).pack(anchor=tk.W)
         tk.Radiobutton(theme_window,text = "géographie des monuments",value=3,variable=theme_var,command=init_globale).pack(anchor=tk.W)
-        tk.mainloop()
     tk.Label(level_window, text = 'Select difficulty', justify = tk.LEFT).pack()
-    tk.Radiobutton(level_window,text = "4 paires",value=1,variable=id_level_var,command=ShowChoice).pack(anchor=tk.W)
-    tk.Radiobutton(level_window,text = "8 paires",value=2,variable=id_level_var,command=ShowChoice).pack(anchor=tk.W)
-    tk.Radiobutton(level_window,text = "10 paires",value=3,variable=id_level_var,command=ShowChoice).pack(anchor=tk.W)
-    tk.Radiobutton(level_window,text = "10 paires",value=4,variable=id_level_var,command=ShowChoice).pack(anchor=tk.W)
+    tk.Radiobutton(level_window,text = "4 paires",value=1,variable=id_level_var,command=ShowChoice).pack()
+    tk.Radiobutton(level_window,text = "8 paires",value=2,variable=id_level_var,command=ShowChoice).pack()
+    tk.Radiobutton(level_window,text = "10 paires",value=3,variable=id_level_var,command=ShowChoice).pack()
+    tk.Radiobutton(level_window,text = "10 paires",value=4,variable=id_level_var,command=ShowChoice).pack()
     tk.mainloop()
-    
 
 def open_playing_window(game, window, bg, front_images):
 
