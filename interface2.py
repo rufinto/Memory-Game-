@@ -111,7 +111,7 @@ def update_countdown(game, can, playing_window, countdown_label, attempts_label,
 def display_attempts(game, attempts_label):
     attempts_label.config(text = game.attempts)
 
-def special1(game, can, playing_window, countdown_label, attempts_label): #retire 5s au chrono
+def power1(game, can, playing_window, countdown_label, attempts_label): #retire 5s au chrono
     timer = int(countdown_label.cget("text"))
     countdown_label.destroy()
     countdown_label2 = tk.Label(playing_window, text="", font=("Helvetica", 20))
@@ -122,7 +122,7 @@ def special1(game, can, playing_window, countdown_label, attempts_label): #retir
     else :
         update_countdown(game, can, playing_window, countdown_label2, attempts_label, new_timer)
 
-def special2(game, can, playing_window, countdown_label, attempts_label): #ajoute 5s au chrono
+def power2(game, can, playing_window, countdown_label, attempts_label): #ajoute 5s au chrono
     timer = int(countdown_label.cget("text"))
     countdown_label.destroy()
     countdown_label2 = tk.Label(playing_window, text="", font=("Helvetica", 20))
@@ -130,7 +130,7 @@ def special2(game, can, playing_window, countdown_label, attempts_label): #ajout
     new_timer = timer + 5
     update_countdown(game, can, playing_window, countdown_label2, attempts_label, new_timer)
 
-def special3(game, can, images_id, front_images): 
+def power3(game, can, images_id, front_images): 
     new_grid = shuffle_cards(game) #change la grille du jeu 
     #reafficher toutes les cartes : il faut changer images_id
     rows = game.level.nb_row
@@ -188,11 +188,11 @@ def on_click(game, event, can, images_id, list, line_height, column_width, back_
                             game.matched_pairs += 1 #une paire en plus est trouvée
                 else :
                     if (card.power == 1) :
-                        special1(game, can, playing_window, countdown_label, attempts_label)
+                        power1(game, can, playing_window, countdown_label, attempts_label)
                     if (card.power == 2) :
-                        special2(game, can, playing_window, countdown_label, attempts_label)
+                        power2(game, can, playing_window, countdown_label, attempts_label)
                     if (card.power == 3):
-                        images_id, list = special3(game, can, images_id, list) #list est front_images
+                        images_id, list = power3(game, can, images_id, list) #list est front_images
                     
 def hide_unmatched_cards(game, can, images_id, card, previous_card, back_image):
     i, j = get_card_position(game, card.id)
