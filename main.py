@@ -3,10 +3,11 @@ from cards import *
 from interface2 import display_main_game_interface
 
 def main():
-    create_all_cards()
-    associate_all_pairs(1) #on fait que pour le theme 1 et 2
-    associate_all_pairs(2)
-    associate_all_pairs(3)
+    create_all_cards() #cards creation
+    associate_all_pairs(1) #pairs of theme 1
+    associate_all_pairs(2) #pairs of theme 2
+    associate_all_pairs(3) #pairs of theme 3
+    
     player, game = init_player_and_game() #initialise le joueur et la partie
     display_main_game_interface(game)
     
