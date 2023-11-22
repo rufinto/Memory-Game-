@@ -49,7 +49,7 @@ def open_playing_window(game, window, bg, front_images):
     card = Card.get_card_with_id(game.cards[0])
     back_image = Image.open(card.back)
     back_image = ImageTk.PhotoImage(back_image)
-    
+    global playing_window
     playing_window = tk.Toplevel(window)
     window_variables.append(playing_window)
     playing_window.title("Game")
@@ -66,9 +66,9 @@ def open_playing_window(game, window, bg, front_images):
     window_variables.append(countdown_label)
     countdown_label.pack(fill = "both", expand=True)
     
-    display_init_fronts(game = game, can = can, playing_window = playing_window, rows = rows, columns = columns, line_height = line_height, column_width = column_width, list = front_images, back_image = back_image, countdown_label = countdown_label, attempts_label = attempts_label )    
+    display_init_fronts(game = game, can = can, playing_window = playing_window, rows = rows, columns = columns, line_height = line_height, column_width = column_width, list = front_images, back_image = back_image, countdown_label = countdown_label, attempts_label = attempts_label)    
     
-def display_init_fronts(game, can : Canvas, playing_window, rows, columns, line_height, column_width, list, back_image, countdown_label, attempts_label  ): #list est la liste des images en format Image
+def display_init_fronts(game, can : Canvas, playing_window, rows, columns, line_height, column_width, list, back_image, countdown_label, attempts_label ): #list est la liste des images en format Image
     images_id = []
     for l in list :
         images_id.append(['']*len(l))
@@ -130,7 +130,7 @@ def display_attempts(game, attempts_label):
 
 def special1_2(game, can, playing_window, countdown_label, attempts_label, i):
     
-    def special2(playing_window, countdown_label): #retire 5s au chrono
+    def special2(playing_window, countdown_label,): #retire 5s au chrono
         if countdown_label.winfo_exists():  # Vérifie si le label existe encore
             timer = int(countdown_label.cget("text"))
             countdown_label.destroy()
@@ -216,7 +216,7 @@ def special4(game, can, playing_window, images_id, front_images, countdown_label
             new_front_images[i][j] = front_images[k][l]
             new_images_id[i][j] = can.create_image(j*column_width + column_width/2 , i*line_height + line_height/2, image = front_images[k][l])
     game.grid = new_grid
-    message_text = "The cards have been shuffeled"
+    message_text = "The cards have been shuffeled...."
     message_frame = tk.Frame(can, bd=5, relief=tk.SOLID)
     message_frame.place(relx=0.5, rely=0.5, anchor="center")
     message_element = tk.Label(message_frame, text=message_text, font=("Helvetica", 20), fg="black")
@@ -228,7 +228,7 @@ def special4(game, can, playing_window, images_id, front_images, countdown_label
 
     return new_images_id, new_front_images
 
-def special3(game, can, images_id, list):
+def special3(game, can, images_id, list):#elle affiche une pair
     for (i,j) in Card.THEMES[game.theme] :
         if i in game.cards and i not in game.flipped:
             k,l = get_card_position(game, i)
@@ -304,7 +304,7 @@ def on_click(game, event, can, images_id, list, line_height, column_width, back_
                             game.matched_pairs += 1 #une paire en plus est trouvée
                 else :
                     if card.power == 1:
-                        window_variables[3] = special1_2(game, can, playing_window, countdown_label, attempts_label, 1)
+                        window_variables[3] = special1_2(game, can, playing_window, countdown_label, attempts_label,1)
                     elif card.power == 2:
                         window_variables[3] = special1_2(game, can, playing_window, countdown_label, attempts_label, 2)
                     if (card.power == 3):
@@ -340,21 +340,18 @@ def open_pseudo_window():
     name = tk.Tk()
     name.minsize(600,600)
     name.title('Choose a pseudo')
-
-    background_image = Image.open("fond1.png")  # Remplacez "votre_image.jpg" par le chemin de votre image
+    background_image = Image.open("fond1.jpg")  # Remplacez "votre_image.jpg" par le chemin de votre image
     background_image = ImageTk.PhotoImage(background_image)
 
     background_label = tk.Label(name, image=background_image)
     background_label.place(relwidth=1, relheight=1)
     pseudo = tk.StringVar()
-
-
     pseudo = tk.StringVar()
-    tk.Label(name,text = 'Pseudo',font=("Tahoma",20),width=6,height=1).place(relx = 0.2, rely = 0.4, anchor = tk.CENTER)
+    tk.Label(name,text = 'Pseudo',font=("Tahoma",20)).place(relx = 0.2, rely = 0.4, anchor = tk.CENTER)
     pseudo = tk.Entry(name)
     pseudo.place(relx=0.45, rely = 0.4, anchor = tk.CENTER)
-    tk.Button(name, text = 'Quit', command = name.quit,font=("Tahoma",20),width=6,height=1).place(relx=0.5, rely=0.85, anchor=tk.CENTER)
-    tk.Button(name, text = 'Confirm', command=init_player,font=("Tahoma",20),width=6,height=2).place(relx = 0.8, rely = 0.4, anchor = tk.CENTER)
+    tk.Button(name, text = 'Quit', command = name.quit,font=("Tahoma",20)).place(relx=0.5, rely=0.85, anchor=tk.CENTER)
+    tk.Button(name, text = 'Confirm', command = lambda : init_player(name,pseudo),font=("Tahoma",20)).place(relx = 0.8, rely = 0.4, anchor = tk.CENTER)
     name.mainloop()
 
 def init_globale(theme_var,level_var,theme_window):
@@ -397,8 +394,6 @@ def play():
     open_parameters_window()
 
 def display_result(game, can, playing_window, result): #change la fenetre de jeu pour afficher game over or win 
-    def restart():
-        open_parameters_window()
     bg = '#C597FF'
     can.destroy()
     playing_window.minsize(500,500)
@@ -407,7 +402,7 @@ def display_result(game, can, playing_window, result): #change la fenetre de jeu
         create_label(playing_window, "GAME OVER", ("Tahoma",20), bg, 'white' )
     if (result == 1):
         create_label(playing_window, "WELL DONE ! YOU WON THIS GAME", ("Tahoma",20), bg, 'white' )
-    add_button(frame, "PLAY AGAIN", font=("Tahoma",20), bg=bg, fg='black', command = lambda : restart())
+    add_button(frame, "PLAY AGAIN", font=("Tahoma",20), bg=bg, fg='black', command = play)
     add_button(frame, "QUIT", font=("Tahoma",20), bg=bg, fg='black', command = lambda : window_variables[0].destroy())
 
 def display_main_game_interface(game):
