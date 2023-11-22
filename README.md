@@ -35,7 +35,7 @@ Le jeu doit se lancer avec le bon nombre de paires retournées et placées aléa
 
 ### Objectif 2: Un Memory Game avec une meilleure interface graphique (Amélioration du MVP)
 
-**Sprint 5 - Création de l''interface pour la grille de jeu **
+**Sprint 5 - Création de l'interface pour la grille de jeu**
 - **Fonctionnalité 7 :** Mise en place d’une fenêtre principale permettant de choisir le thème et le niveau du jeu et d’une fenêtre permettant de relancer une partie ou fermer le jeu.
 - **Fonctionnalité 6 :** Ajout d’un chronomètre pendant le jeu.
 
@@ -65,6 +65,8 @@ Le jeu doit se lancer avec le bon nombre de paires retournées et placées aléa
     ```bash
     pip install pytest
     pip install tkinter
+    pip install pillow
+    pip install pygame
     ```
 
 ## Comment Jouer
