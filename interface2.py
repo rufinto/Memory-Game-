@@ -62,7 +62,8 @@ def open_parameters_window():
         def init_globale():
             theme = theme_var.get()
             game = Game(level,theme)
-            return(game)
+            theme_window.destroy()
+            display_main_game_interface(game)
         theme_window = create_window('Select a theme','light blue')
         theme_var = tk.IntVar()
         tk.Label(theme_window, text = 'Select theme', justify = tk.LEFT).pack()
