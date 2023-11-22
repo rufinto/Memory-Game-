@@ -1,52 +1,86 @@
-
 # Memory Game - Projet de Développement
 
-Bienvenue dans le projet de développement du jeu Memory. Ce mini-projet a pour objectif de créer une version progressive du jeu Memory en suivant les bonnes pratiques de programmation et en mettant l'accent sur la qualité logicielle.
+Bienvenue dans le projet de développement collaboratif du jeu de mémoire en utilisant Python et Tkinter pour l'interface graphique. Ce projet est une initiative de groupe, conçu avec les principes de la programmation orientée objet, suit les pratiques du développement piloté par les tests (TDD), et propose différents thèmes tels que le cinéma, les monuments, les associations étudiantes de CS.
+
+## Introduction
+Le jeu Memory est une excellente façon d'exercer votre mémoire tout en vous amusant. Ce projet vise à créer une version améliorée du jeu Memory en utilisant Python et Tkinter pour l'interface graphique. Nous mettons l'accent sur la collaboration en groupe, en suivant les principes de la programmation orientée objet et en adoptant des pratiques de développement piloté par les tests (TDD).
 
 ## À Propos du Jeu Memory
 
-Memory est un jeu classique de mémoire où le joueur doit trouver des paires de cartes identiques. Les règles sont simples : à chaque tour, le joueur retourne deux cartes de la grille. Si les cartes sont identiques, elles restent visibles ; sinon, elles sont retournées face cachée. Le but est de trouver toutes les paires en se rappelant de l'emplacement des cartes.
+Le jeu doit se lancer avec le bon nombre de paires retournées et placées aléatoirement sur la grille. Au début du jeu, les cartes sont affichées pendant 5 secondes avant d'être cachées. Le joueur doit pouvoir sélectionner la carte qu'il veut retourner en cliquant dessus. Le joueur doit retourner deux cartes àa la suite, si les deux cartes constituent une paire (un point est gagné) les cartes restent retournées. Sinon, les deux cartes redeviennt cachées, le joueur ne gagne pas de point. Le jeu se termine lorsque toutes les cartes sont retournées.
 
 ## Organisation du Mini-Projet
 
 ### Objectif 1 (MVP): Un Memory Minimum, sans Interface Graphique
 
-**Sprint 0 - Installation et Conception**
-- Installer le socle technique.
-- Analyser les besoins.
-- Réfléchir à la conception.
+**Sprint 0 - Analyse du problème et réflexion autour de la conception**
+- Générer aléatoirement les cartes de la grille de jeu.
+- Jouer en lui demandant de choisir deux cartes et de vérifier qu’ils appartiennent au même couple.
+- Tester la fin du jeu .
 
 **Sprint 1 - Mise en Place des Données du Jeu**
-- **Fonctionnalité 1 :** Représenter une grille de jeu.
-- **Fonctionnalité 2 :** Afficher une grille de jeu.
+- **Fonctionnalité 1 :** Création de toutes les classes nécessaires et les fonctions correspondantes: Card, Game et Player 
+- **Fonctionnalité 2 :** initialiser la grille de cartes en choisissant une disposition initiale aléatoire  .
 
-**Sprint 2 - Actions des joueurs**
-- **Fonctionnalité 3 :** Faire jouer le joueur - Donner une instruction de jeu.
+**Sprint 2 - Première interface graphique**
+- **Fonctionnalité 3 :** création d’une première interface graphique avec le module Tkinter.
 
-**Sprint 3 - Gestions des retournements des cartes**
-- **Fonctionnalité 4 :** Gestion des retournements de cartes.
-- **Fonctionnalité 5 :** Tester la fin du jeu.
+**Sprint 3 - Gestion des actions du joueur**
+- **Fonctionnalité 4 :** ajout de boutons pour chaque carte qui permet d’afficher sa face pendant une courte durée 
+
+- **Fonctionnalité 5 :** Gestion des retournements et tester la fin du jeu.
 
 **Sprint 4 - Jouer !**
-- **Fonctionnalité 6 :** Faire jouer un joueur.
+- **Fonctionnalité 6 :** Mettre le jeu en marche.
 
-### Objectif 2: Un Memory avec une interface graphique
-**Sprint 5 - Montée en compétences sur les interfaces graphiques**
-- Montée en compétences : les interfaces graphiques en Python.
+### Objectif 2: Un Memory Game avec une meilleure interface graphique (Amélioration du MVP)
 
-**Sprint 6 - Creation de l'interface pour la grille de jeu**
-- **Fonctionnalité 8 :** Affichage de la grille de jeu dans une fenêtre Tkinter.
-- **Fonctionnalité 9 :** Permettre la configuration du jeu via l'interface graphique.
+**Sprint 5 - Création de l''interface pour la grille de jeu **
+- **Fonctionnalité 7 :** Mise en place d’une fenêtre principale permettant de choisir le thème et le niveau du jeu et d’une fenêtre permettant de relancer une partie ou fermer le jeu.
+- **Fonctionnalité 6 :** Ajout d’un chronomètre pendant le jeu.
 
-### Objectif 3: Un Memory avec gestion des joueurs, scores, suggestions de coups, etc.
-- Appliquer les retours utilisateurs des objectifs précédents.
-- Déc...
+### Objectif 3: Un Memory Game avec la gestion des joueurs, de leur score et ajout de cartes spéciales.
+- Le jeu dispose de nouvelles fonctions spéciales notamment le calcul du score du joueur et ajout de cartes spéciales qui apparaissent pendant le jeu. En plus, des musiques de fond ont été ajoutés pour rendre le jeu plus agréable
+
+## Requirements
+
+- Python 3.11
+
+## Installation
+
+1. Clone the repository:
+
+    ```bash
+    git clone https://gitlab-research.centralesupelec.fr/sarra.ouhmidou/groupe12_memory
+    ```
+
+2. Change to the project directory:
+
+    ```bash
+    cd memory
+    ```
+
+3. Install dependencies:
+
+    ```bash
+    pip install pytest
+    pip install tkinter
+    ```
 
 ## Comment Jouer
 
-1. Lancez le jeu en exécutant le fichier principal.
+1. Lancez le jeu en exécutant le fichier main.py
 2. Observez les cartes et essayez de trouver des paires identiques.
 3. Cliquez sur deux cartes pour les retourner. Si elles sont identiques, elles resteront visibles.
 4. Continuez à tourner les cartes jusqu'à ce que toutes les paires soient trouvées.
 
+
+
 Amusez-vous bien en jouant au jeu Memory!
+
+
+
+
+
+
+
