@@ -7,13 +7,14 @@ Le jeu Memory est une excellente façon d'exercer votre mémoire tout en vous am
 
 ## À Propos du Jeu Memory
 
-Le jeu doit se lancer avec le bon nombre de paires retournées et placées aléatoirement sur la grille. Au début du jeu, les cartes sont affichées pendant 5 secondes avant d'être cachées. Le joueur doit pouvoir sélectionner la carte qu'il veut retourner en cliquant dessus. Le joueur doit retourner deux cartes àa la suite, si les deux cartes constituent une paire (un point est gagné) les cartes restent retournées. Sinon, les deux cartes redeviennt cachées, le joueur ne gagne pas de point. Le jeu se termine lorsque toutes les cartes sont retournées.
+Le jeu doit se lancer avec le bon nombre de paires retournées et placées aléatoirement sur la grille. Au début du jeu, les cartes sont affichées pendant 5 secondes avant d'être cachées. Le joueur doit pouvoir sélectionner la carte qu'il veut retourner en cliquant dessus. Le joueur doit retourner deux cartes à la suite, si les deux cartes constituent une paire (un point est gagné) les cartes restent retournées. Sinon, les deux cartes redeviennt cachées, le joueur ne gagne pas de point. Le jeu se termine lorsque toutes les cartes sont retournées.
 
 ## Organisation du Mini-Projet
 
-### Objectif 1 (MVP): Un Memory Minimum, sans Interface Graphique
+### Objectif 1 (MVP): Un jeu Memory Minimum
 
 **Sprint 0 - Analyse du problème et réflexion autour de la conception**
+Le jeu doit permettre au joueur de:
 - Générer aléatoirement les cartes de la grille de jeu.
 - Jouer en lui demandant de choisir deux cartes et de vérifier qu’ils appartiennent au même couple.
 - Tester la fin du jeu .
@@ -37,10 +38,14 @@ Le jeu doit se lancer avec le bon nombre de paires retournées et placées aléa
 
 **Sprint 5 - Création de l'interface pour la grille de jeu**
 - **Fonctionnalité 7 :** Mise en place d’une fenêtre principale permettant de choisir le thème et le niveau du jeu et d’une fenêtre permettant de relancer une partie ou fermer le jeu.
-- **Fonctionnalité 6 :** Ajout d’un chronomètre pendant le jeu.
+- **Fonctionnalité 6 :** Ajout d’un chronomètre pendant le jeu et de messages.
 
 ### Objectif 3: Un Memory Game avec la gestion des joueurs, de leur score et ajout de cartes spéciales.
-- Le jeu dispose de nouvelles fonctions spéciales notamment le calcul du score du joueur et ajout de cartes spéciales qui apparaissent pendant le jeu. En plus, des musiques de fond ont été ajoutés pour rendre le jeu plus agréable
+- Le jeu dispose de nouvelles fonctions spéciales notamment le calcul du score du joueur et l'ajout de cartes spéciales qui apparaissent pendant le jeu. En plus, des musiques de fond ont été ajoutés pour rendre le jeu plus agréable
+
+
+
+
 
 ## Requirements
 
