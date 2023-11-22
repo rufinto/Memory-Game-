@@ -310,7 +310,7 @@ def open_parameters_window():
     level_window.mainloop()
 
 def play():
-    window_variables[0].destroy()
+    window_variables[1].destroy()
     open_parameters_window()
 
 def display_result(game, can, playing_window, result): #change la fenetre de jeu pour afficher game over or win 
