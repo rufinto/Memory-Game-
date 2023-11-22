@@ -7,6 +7,7 @@ from cards import get_front_images
 from cards import shuffle_cards
 from PIL import Image, ImageTk
 from cards import *
+import time
 
 window_variables = []
 
@@ -48,7 +49,7 @@ def open_playing_window(game, window, bg, front_images):
     card = Card.get_card_with_id(game.cards[0])
     back_image = Image.open(card.back)
     back_image = ImageTk.PhotoImage(back_image)
-    
+    global playing_window
     playing_window = tk.Toplevel(window)
     window_variables.append(playing_window)
     playing_window.title("Game")
@@ -56,10 +57,6 @@ def open_playing_window(game, window, bg, front_images):
     playing_window.config(bg = bg)
     
     can = create_grid(playing_window, 700, 700, bg, rows, columns)
-    global message_label
-    message_label = tk.Label(playing_window, text="", font=("Helvetica", 16))
-    window_variables.append(message_label)
-    message_label.pack(fill="both", expand=True)
     
     
     attempts_label = tk.Label(playing_window, text="", font=("Helvetica", 20))
@@ -69,9 +66,9 @@ def open_playing_window(game, window, bg, front_images):
     window_variables.append(countdown_label)
     countdown_label.pack(fill = "both", expand=True)
     
-    display_init_fronts(game = game, can = can, playing_window = playing_window, rows = rows, columns = columns, line_height = line_height, column_width = column_width, list = front_images, back_image = back_image, countdown_label = countdown_label, attempts_label = attempts_label, message_widget=message_label)    
+    display_init_fronts(game = game, can = can, playing_window = playing_window, rows = rows, columns = columns, line_height = line_height, column_width = column_width, list = front_images, back_image = back_image, countdown_label = countdown_label, attempts_label = attempts_label)    
     
-def display_init_fronts(game, can : Canvas, playing_window, rows, columns, line_height, column_width, list, back_image, countdown_label, attempts_label,message_widget ): #list est la liste des images en format Image
+def display_init_fronts(game, can : Canvas, playing_window, rows, columns, line_height, column_width, list, back_image, countdown_label, attempts_label ): #list est la liste des images en format Image
     images_id = []
     for l in list :
         images_id.append(['']*len(l))
@@ -131,9 +128,9 @@ def update_countdown(game, can, playing_window, countdown_label, attempts_label,
 def display_attempts(game, attempts_label):
     attempts_label.config(text = game.level.max_attempts - game.attempts)
 
-def special1_2(game, can, playing_window, countdown_label, attempts_label, i,message_widget=None):
+def special1_2(game, can, playing_window, countdown_label, attempts_label, i):
     
-    def special2(playing_window, countdown_label,message_widget): #retire 5s au chrono
+    def special2(playing_window, countdown_label,): #retire 5s au chrono
         if countdown_label.winfo_exists():  # Vérifie si le label existe encore
             timer = int(countdown_label.cget("text"))
             countdown_label.destroy()
@@ -141,34 +138,64 @@ def special1_2(game, can, playing_window, countdown_label, attempts_label, i,mes
             countdown_label2.pack(fill = "both", expand = True)
             new_timer = timer - 5
             if (new_timer <= 0):
-                message_widget.config(text="Oops! Tu as perdu 5 secondes.")
-                return (countdown_label2, 0)      
+                  message_text = "Oups You lost 5 seconds...."
+                    
+                    # Créer un cadre pour encadrer le texte
+                  message_frame = tk.Frame(can, bd=5, relief=tk.SOLID)
+                  message_frame.place(relx=0.5, rely=0.5, anchor="center")
+
+                    # Créer le texte à l'intérieur du cadre
+                  message_element = tk.Label(message_frame, text=message_text, font=("Helvetica", 20), fg="black")
+                  message_element.pack(padx=10, pady=10) 
+
+                  playing_window.update()
+                  time.sleep(1)
+
+                    # Supprimer le message après 1 seconde
+                  message_frame.destroy()
+                
+                
+                  return (countdown_label2, 0)      
             else :
-                return (countdown_label2, new_timer)
+                 return (countdown_label2, new_timer)
         else :
             return None, None
 
-    def special1(playing_window, countdown_label,message_widget): #ajoute 10s au chrono
+    def special1(playing_window, countdown_label): #ajoute 10s au chrono
         if countdown_label.winfo_exists():  # Vérifie si le label existe encore
             timer = int(countdown_label.cget("text"))
             countdown_label.destroy()
             countdown_label2 = tk.Label(playing_window, text="", font=("Helvetica", 20))
             countdown_label2.pack(fill = "both", expand = True)
             new_timer = timer + 10
-            message_widget.config(text="Youpi! Tu as gagné 10 secondes.")
+            message_text = "Youpii You won 10 seconds!!"
+                    
+                    # Créer un cadre pour encadrer le texte
+            message_frame = tk.Frame(can, bd=5, relief=tk.SOLID)
+            message_frame.place(relx=0.5, rely=0.5, anchor="center")
+
+                    # Créer le texte à l'intérieur du cadre
+            message_element = tk.Label(message_frame, text=message_text, font=("Helvetica", 20), fg="black")
+            message_element.pack(padx=10, pady=10) 
+
+            playing_window.update()
+            time.sleep(1)
+
+                    # Supprimer le message après 1 seconde
+            message_frame.destroy()
             return (countdown_label2, new_timer)
         else :
             return None, None
         
     if (i == 1) :
-        countdown_label, new_timer = special1(playing_window, countdown_label,message_widget)
+        countdown_label, new_timer = special1(playing_window, countdown_label)
     elif (i == 2) :
-        countdown_label, new_timer = special2(playing_window, countdown_label,message_widget)
+        countdown_label, new_timer = special2(playing_window, countdown_label)
     if (countdown_label, new_timer) != (None, None) :
         update_countdown(game, can, playing_window, countdown_label, attempts_label, new_timer)
     return countdown_label
 
-def special4(game, can, playing_window, images_id, front_images, countdown_label, attempts_label, back_image,message_widget=None): 
+def special4(game, can, playing_window, images_id, front_images, countdown_label, attempts_label, back_image): 
     new_grid = shuffle_cards(game) #change la grille du jeu 
     #reafficher toutes les cartes : il faut changer images_id et front_images
     rows = game.level.nb_row
@@ -189,11 +216,19 @@ def special4(game, can, playing_window, images_id, front_images, countdown_label
             new_front_images[i][j] = front_images[k][l]
             new_images_id[i][j] = can.create_image(j*column_width + column_width/2 , i*line_height + line_height/2, image = front_images[k][l])
     game.grid = new_grid
+    message_text = "The cards have been shuffeled...."
+    message_frame = tk.Frame(can, bd=5, relief=tk.SOLID)
+    message_frame.place(relx=0.5, rely=0.5, anchor="center")
+    message_element = tk.Label(message_frame, text=message_text, font=("Helvetica", 20), fg="black")
+    message_element.pack(padx=10, pady=10) 
+    playing_window.update()
+    time.sleep(1)
+    message_frame.destroy()
     update_init_countdown(game, can , playing_window, countdown_label, attempts_label, 3, new_images_id, back_image)
-    message_widget.config(text="La grille est mélangée")
+
     return new_images_id, new_front_images
 
-def special3(game, can, images_id, list,message_widget=None):#elle affiche une pair
+def special3(game, can, images_id, list):#elle affiche une pair
     for (i,j) in Card.THEMES[game.theme] :
         if i in game.cards and i not in game.flipped:
             k,l = get_card_position(game, i)
@@ -207,7 +242,22 @@ def special3(game, can, images_id, list,message_widget=None):#elle affiche une p
             game.matched_pairs += 1
             game.flipped.append(i)
             game.flipped.append(j)
-            message_widget.config(text="Une paire est affichée!!")
+            message_text = "A pair is revealed !!"
+            
+            # Créer un cadre pour encadrer le texte
+            message_frame = tk.Frame(can, bd=5, relief=tk.SOLID)
+            message_frame.place(relx=0.5, rely=0.5, anchor="center")
+
+            # Créer le texte à l'intérieur du cadre
+            message_element = tk.Label(message_frame, text=message_text, font=("Helvetica", 20), fg="black")
+            message_element.pack(padx=10, pady=10) 
+
+            playing_window.update()
+            time.sleep(1)
+
+            # Supprimer le message après 1 seconde
+            message_frame.destroy()
+
             return i,j
 
 def on_click(game, event, can, images_id, list, line_height, column_width, back_image, attempts_label, countdown_label, playing_window):
@@ -254,12 +304,12 @@ def on_click(game, event, can, images_id, list, line_height, column_width, back_
                             game.matched_pairs += 1 #une paire en plus est trouvée
                 else :
                     if card.power == 1:
-                        window_variables[3] = special1_2(game, can, playing_window, countdown_label, attempts_label,1,message_label)
+                        window_variables[3] = special1_2(game, can, playing_window, countdown_label, attempts_label,1)
                     elif card.power == 2:
-                        window_variables[3] = special1_2(game, can, playing_window, countdown_label, attempts_label, 2,message_label)
+                        window_variables[3] = special1_2(game, can, playing_window, countdown_label, attempts_label, 2)
                     if (card.power == 3):
                         game.flipped.append(card.id) 
-                        special3(game, can, images_id, list,message_label)
+                        special3(game, can, images_id, list)
                         
 def hide_unmatched_cards(game, can, images_id, card, previous_card, back_image):
     i, j = get_card_position(game, card.id)
