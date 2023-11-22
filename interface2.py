@@ -80,7 +80,7 @@ def display_init_fronts(game, can : Canvas, playing_window, rows, columns, line_
     
 def display_result(game, can, playing_window, result): #change la fenetre de jeu pour afficher game over or win 
     def restart():
-       open_pseudo_window()
+        open_parameters_window()
     bg = '#C597FF'
     can.destroy()
     playing_window.minsize(500,500)
