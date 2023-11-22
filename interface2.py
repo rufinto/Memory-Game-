@@ -6,9 +6,12 @@ from cards import get_card_position
 from cards import get_front_images
 from cards import shuffle_cards
 from PIL import Image, ImageTk
+import time
 
 window_variables = []
 #format : [window]
+image_variables = []
+#format : [front_images, images_id]
 
 def create_window( title, color):
     window = tk.Tk()
@@ -38,7 +41,6 @@ def add_button(frame, text, font, bg, fg, command):
     frame.pack(expand="Yes")
 
 def open_playing_window(game, window, bg, front_images):
-
     rows = game.level.nb_row
     columns = game.level.nb_column
     line_height = 700//rows  #hauteur de chaque ligne
@@ -71,9 +73,11 @@ def display_init_fronts(game, can : Canvas, playing_window, rows, columns, line_
     for i in range(rows):
         for j in range(columns):
             images_id[i][j] = can.create_image(j*column_width + column_width/2 , i*line_height + line_height/2, image = list[i][j])
-       
+    
+    image_variables.append(images_id)
+
     update_init_countdown(game, can, playing_window, countdown_label, attempts_label,  3, images_id, back_image) #on lance le decompte initiale
-    can.bind("<Button-1>", lambda event : on_click(game, event, can, images_id, list, line_height, column_width, back_image, attempts_label, countdown_label, playing_window )) #"<Button-1>" : clic bouton gauche
+    can.bind("<Button-1>", lambda event : on_click(game, event, can, line_height, column_width, back_image, attempts_label, countdown_label, playing_window )) #"<Button-1>" : clic bouton gauche
     display_attempts(game, attempts_label)
     
 def display_result(game, can, playing_window, result): #change la fenetre de jeu pour afficher game over or win 
@@ -155,28 +159,45 @@ def special1_2(game, can, playing_window, countdown_label, attempts_label, i):
         update_countdown(game, can, playing_window, countdown_label, attempts_label, new_timer)
     return countdown_label
 
-def special4(game, can, playing_window, images_id, front_images, countdown_label, attempts_label, back_image): 
+def special4(game, can, front_images, back_image): #shuffle
     new_grid = shuffle_cards(game) #change la grille du jeu 
-    #reafficher toutes les cartes : il faut changer images_id et front_images
     rows = game.level.nb_row
     columns = game.level.nb_column
     line_height = 700//rows  #hauteur de chaque ligne
     column_width = 700//columns #largeur de chaque colonne
-    
     new_images_id = []
     new_front_images = []
     
     for l in new_grid :
         new_images_id.append([0]*len(l))
         new_front_images.append([0]*len(l))
+        
     for i in range(rows):
         for j in range(columns):
             new_id = new_grid[i][j] #identifiant de la carte a mettre en position i,j
             k,l = get_card_position(game, new_id)
             new_front_images[i][j] = front_images[k][l]
             new_images_id[i][j] = can.create_image(j*column_width + column_width/2 , i*line_height + line_height/2, image = front_images[k][l])
+    
+    image_variables[0] = new_front_images
+    image_variables[1] = new_images_id 
+    
     game.grid = new_grid
-    update_init_countdown(game, can , playing_window, countdown_label, attempts_label, 3, new_images_id, back_image)
+    game.flipped = []
+    game.matched_pairs = 0
+    
+    for list in new_images_id: #affichage des dos
+        for image_id in list : 
+            can.itemconfig(image_id, image = back_image)
+            
+    for id in game.cards :
+        card = Card.get_card_with_id(id)
+        card.flipped = False
+        
+    for id in game.special_cards :
+        card = Card.get_card_with_id(id)
+        card.flipped = False
+    
     return new_images_id, new_front_images
 
 def special3(game, can, images_id, list):
@@ -195,7 +216,8 @@ def special3(game, can, images_id, list):
             game.flipped.append(j)
             return i,j
 
-def on_click(game, event, can, images_id, list, line_height, column_width, back_image, attempts_label, countdown_label, playing_window):
+def on_click(game, event, can, line_height, column_width, back_image, attempts_label, countdown_label, playing_window):
+    
     def get_clicked_image(event, line_height, column_width):
         x,y = event.x, event.y #coordonnes du click
         row = int(y)// line_height #ligne du click
@@ -207,7 +229,10 @@ def on_click(game, event, can, images_id, list, line_height, column_width, back_
             return row, column
         else:
             return None, None
-
+        
+    list = image_variables[0]
+    images_id = image_variables[1]
+    
     if (game.started == True) : 
         i, j = get_clicked_image(event, line_height, column_width)
         if ( (i,j) != (None, None)):
@@ -217,7 +242,7 @@ def on_click(game, event, can, images_id, list, line_height, column_width, back_
             card = Card.get_card_with_id(card_id)
             if not card.flipped and card.id not in game.flipped:  # Vérifie si la carte n'est pas déjà retournée et n'est pas déjà appariée
                 card.flipped = True
-                can.itemconfig(images_id[i][j], image=list[i][j])  # On affiche l'image
+                can.itemconfig(images_id[i][j], image = list[i][j])  # On affiche l'image
                 if (card.power == 0):
                     game.flipped.append(card.id) #on met pas les cartes speciales dans flipped à part la 3
                     if ((len(game.flipped) % 2 == 0 and 202 not in game.flipped)):
@@ -238,13 +263,16 @@ def on_click(game, event, can, images_id, list, line_height, column_width, back_
                         else :
                             game.matched_pairs += 1 #une paire en plus est trouvée
                 else :
-                    if card.power == 1:
+                    if (card.power == 1):
                         special1_2(game, can, playing_window, countdown_label, attempts_label, 1)
-                    elif card.power == 2:
+                    elif (card.power == 2):
                         special1_2(game, can, playing_window, countdown_label, attempts_label, 2)
-                    if (card.power == 3):
+                    elif (card.power == 3):
                         game.flipped.append(card.id) 
                         special3(game, can, images_id, list)
+                    elif (card.power == 4):
+                        can.itemconfig(images_id[i][j], image = list[i][j])  # On affiche l'image
+                        special4(game, can, list, back_image)
                         
 def hide_unmatched_cards(game, can, images_id, card, previous_card, back_image):
     i, j = get_card_position(game, card.id)
@@ -279,5 +307,6 @@ def display_main_game_interface(game):
     create_icanva(window, bg, 250, 250, 250, 250, image)
     frame = create_frame(window, bg, 400, 250, 5, 30)
     front_images = get_front_images(game)
+    image_variables.append(front_images)
     add_button(frame, "PLAY", font=("Tahoma",20), bg=bg, fg='black', command = lambda : open_playing_window(game, window, bg, front_images))
     window.mainloop()
