@@ -64,9 +64,9 @@ class Card :
     
     @classmethod
     def choose_special_cards(cls, number):
-        special_cards_id = [200, 201]
+        special_cards_id = [200, 202]
         #special_cards_id = [200, 201, 202, 203, 204]
-        return rd.sample(special_cards_id, number)
+        return rd.sample(special_cards_id, k = number)
     
 class Level :
     def __init__(self, id, nb_pairs, nb_row, nb_column):
@@ -106,8 +106,10 @@ class Game :
         level = self.level
         nb_row = level.nb_row
         nb_column = level.nb_column
-        for i in range(0,(nb_row-1)*nb_column + 1, nb_column):
-            grid.append(self.cards[i:i+nb_column])
+        cards = self.cards.copy()
+        rd.shuffle(cards)
+        for i in range(0,(nb_row-1)*nb_column + 1, nb_column ):
+            grid.append(cards[i:i+nb_column])
         self.grid = grid
         self.init_special_cards
     
@@ -120,7 +122,6 @@ class Game :
                 card = Card.get_card_with_id(id)
                 card.back = back
                 card.theme = self.theme
-                self.cards.append(card.id)
         elif (self.level.id == 4):
             self.special_cards = Card.choose_special_cards(4)
             for id in self.special_cards :
@@ -128,7 +129,6 @@ class Game :
                 card = Card.get_card_with_id(id)
                 card.back = back
                 card.theme = self.theme
-                self.cards.append(card.id)
         
     def is_finished(self): #game over if all pairs have been discovered or all attemps have been used 
         return (self.matched_pairs is self.level.nb_pairs, self.attempts >= self.level.max_attempts)
