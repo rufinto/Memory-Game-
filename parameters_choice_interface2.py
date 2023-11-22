@@ -1,7 +1,15 @@
 import tkinter as tk
 from tkinter import Canvas, PhotoImage
 from tkinter import ttk
-
+import tkinter as tk
+from tkinter import Canvas
+from tkinter import ttk
+from classes import *
+from cards import get_card_position
+from cards import get_front_images
+from cards import shuffle_cards
+from PIL import Image, ImageTk
+from interface2 import create_window, display_main_game_interface
 def choisir_theme(theme):
     print(f"Thème choisi : {theme}")
 
