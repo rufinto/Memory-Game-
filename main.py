@@ -8,5 +8,6 @@ def main():
     player, game = init_player_and_game() #initialise le joueur et la partie
     display_main_game_interface(game)
     
+    
 #while(not game.is_finished()): #tant que le jeu n'est pas terminée on enregistre les choix du joueur 
 main()
