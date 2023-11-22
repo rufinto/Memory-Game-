@@ -12,10 +12,10 @@ from SOUNDS import *
 pygame.init()
 
 # Chargement des sons
-sound_first_page = pygame.mixer.Sound("sound_first_page.mp3")
-sound_button_play = pygame.mixer.Sound("sound_button_play.mp3")
-sound_wrong_pair = pygame.mixer.Sound("sound_wrong_pair.mp3")
-sound_right_pair =pygame.mixer.Sound("sound_right_pair.mp3")
+sound_first_page = pygame.mixer.Sound("SOUNDS/sound_first_page.mp3")
+sound_button_play = pygame.mixer.Sound("SOUNDS/sound_button_play.mp3")
+sound_wrong_pair = pygame.mixer.Sound("SOUNDS/sound_wrong_pair.mp3")
+sound_right_pair =pygame.mixer.Sound("SOUNDS/sound_right_pair.mp3")
 
 def play_sound(sound):
     pygame.mixer.Sound.play(sound)
@@ -51,7 +51,8 @@ def add_button(frame, text, font, bg, fg, command):
     print("========ok boutton")
 
 def open_playing_window(game, window, bg, front_images):
-
+    
+    play_sound(sound_first_page)
     rows = game.level.nb_row
     columns = game.level.nb_column
     line_height = 700//rows  #hauteur de chaque ligne
@@ -238,8 +239,10 @@ def on_click(game, event, can, images_id, list, line_height, column_width, back_
                         previous_try_id = game.flipped[-2]
                         previous_card = Card.get_card_with_id(previous_try_id)
                         if card.is_pair_of(previous_card) == False:
+                            play_sound(sound_wrong_pair)
                             can.after(1000, lambda: hide_unmatched_cards(game, can, images_id, card, previous_card, back_image))
                         else :
+                            play_sound(sound_right_pair)
                             game.matched_pairs += 1 #une paire en plus est trouvée                        
                     elif (202 in game.flipped and len(game.flipped) % 2 == 0) : #cas ou on avait deja une paire
                         game.flipped.remove(202) #on enleve la carte spe 3
