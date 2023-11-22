@@ -38,7 +38,8 @@ def open_pseudo_window():
     def init_player():
         player = Player(player_name)
         name.destroy()
-    name = create_window('Saisissez votre pseudo joueur','light blue')
+        open_parameters_window()
+    name = create_window('Saisissez votre pseudo joueur','#C597FF')
     tk.Label(name,text = 'Name').grid(row = 0)
     player_name = tk.Entry(name)
     player_name.grid(row = 0, column = 1)
@@ -47,7 +48,7 @@ def open_pseudo_window():
     name.mainloop()
 
 def open_parameters_window(): 
-    level_window = create_window('Choose difficulty', 'light blue')
+    level_window = create_window('Choose difficulty', '#C597FF')
     id_level_var = tk.IntVar()
     def ShowChoice():
         level_window.destroy()
@@ -64,7 +65,7 @@ def open_parameters_window():
             game = Game(level,theme)
             theme_window.destroy()
             display_main_game_interface(game)
-        theme_window = create_window('Select a theme','light blue')
+        theme_window = create_window('Select a theme','#C597FF')
         theme_var = tk.IntVar()
         tk.Label(theme_window, text = 'Select theme', justify = tk.LEFT).pack()
         tk.Radiobutton(theme_window,text = "assos CS",value=1,variable=theme_var,command=init_globale).pack(anchor=tk.W)
@@ -74,7 +75,7 @@ def open_parameters_window():
     tk.Radiobutton(level_window,text = "4 paires",value=1,variable=id_level_var,command=ShowChoice).pack()
     tk.Radiobutton(level_window,text = "8 paires",value=2,variable=id_level_var,command=ShowChoice).pack()
     tk.Radiobutton(level_window,text = "10 paires",value=3,variable=id_level_var,command=ShowChoice).pack()
-    tk.Radiobutton(level_window,text = "10 paires",value=4,variable=id_level_var,command=ShowChoice).pack()
+    tk.Radiobutton(level_window,text = "12 paires",value=4,variable=id_level_var,command=ShowChoice).pack()
     tk.mainloop()
 
 def open_playing_window(game, window, bg, front_images):

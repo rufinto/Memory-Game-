@@ -8,7 +8,6 @@ def main():
     associate_all_pairs(2)
     associate_all_pairs(3)
     open_pseudo_window()
-    open_parameters_window()
 
 #while(not game.is_finished()): #tant que le jeu n'est pas terminée on enregistre les choix du joueur 
 main()
