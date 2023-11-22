@@ -216,7 +216,7 @@ def special4(game, can, playing_window, images_id, front_images, countdown_label
             new_front_images[i][j] = front_images[k][l]
             new_images_id[i][j] = can.create_image(j*column_width + column_width/2 , i*line_height + line_height/2, image = front_images[k][l])
     game.grid = new_grid
-    message_text = "The cards have been shuffeled...."
+    message_text = "The cards have been shuffeled"
     message_frame = tk.Frame(can, bd=5, relief=tk.SOLID)
     message_frame.place(relx=0.5, rely=0.5, anchor="center")
     message_element = tk.Label(message_frame, text=message_text, font=("Helvetica", 20), fg="black")
@@ -340,18 +340,18 @@ def open_pseudo_window():
     name = tk.Tk()
     name.minsize(600,600)
     name.title('Choose a pseudo')
-    background_image = Image.open("fond1.jpg")  # Remplacez "votre_image.jpg" par le chemin de votre image
+    background_image = Image.open("fond1.png")  # Remplacez "votre_image.jpg" par le chemin de votre image
     background_image = ImageTk.PhotoImage(background_image)
 
     background_label = tk.Label(name, image=background_image)
     background_label.place(relwidth=1, relheight=1)
     pseudo = tk.StringVar()
     pseudo = tk.StringVar()
-    tk.Label(name,text = 'Pseudo',font=("Tahoma",20)).place(relx = 0.2, rely = 0.4, anchor = tk.CENTER)
+    tk.Label(name,text = 'Pseudo',font=("Tahoma",20),width=6,height=1).place(relx = 0.2, rely = 0.4, anchor = tk.CENTER)
     pseudo = tk.Entry(name)
     pseudo.place(relx=0.45, rely = 0.4, anchor = tk.CENTER)
-    tk.Button(name, text = 'Quit', command = name.quit,font=("Tahoma",20)).place(relx=0.5, rely=0.85, anchor=tk.CENTER)
-    tk.Button(name, text = 'Confirm', command=init_player,font=("Tahoma",20)).place(relx = 0.8, rely = 0.4, anchor = tk.CENTER)
+    tk.Button(name, text = 'Quit', command = name.quit,font=("Tahoma",20),width=6,height=1).place(relx=0.5, rely=0.85, anchor=tk.CENTER)
+    tk.Button(name, text = 'Confirm', command=init_player,font=("Tahoma",20),width=6,height=2).place(relx = 0.8, rely = 0.4, anchor = tk.CENTER)
     name.mainloop()
 
 def open_parameters_window(): 
