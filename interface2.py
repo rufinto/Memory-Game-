@@ -49,6 +49,7 @@ def open_playing_window(game, window, bg, front_images):
     card = Card.get_card_with_id(game.cards[0])
     back_image = Image.open(card.back)
     back_image = ImageTk.PhotoImage(back_image)
+    global playing_window
     
     playing_window = tk.Toplevel(window)
     window_variables.append(playing_window)
@@ -354,7 +355,7 @@ def open_pseudo_window():
     pseudo = tk.Entry(name)
     pseudo.place(relx=0.45, rely = 0.4, anchor = tk.CENTER)
     tk.Button(name, text = 'Quit', command = name.quit,font=("Tahoma",20),width=6,height=1).place(relx=0.5, rely=0.85, anchor=tk.CENTER)
-    tk.Button(name, text = 'Confirm', command=init_player,font=("Tahoma",20),width=6,height=2).place(relx = 0.8, rely = 0.4, anchor = tk.CENTER)
+    tk.Button(name, text = 'Confirm', command=init_player(name,pseudo),font=("Tahoma",20),width=6,height=2).place(relx = 0.8, rely = 0.4, anchor = tk.CENTER)
     name.mainloop()
 
 def init_globale(theme_var,level_var,theme_window):
