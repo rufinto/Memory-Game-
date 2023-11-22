@@ -214,6 +214,18 @@ def create_grid(window, width, height, bg, rows, columns):  # creee un canva ave
     can.pack(expand='yes')
     return can
 
+# def main1():
+#     global window  # Assuming that 'window' is a global variable
+
+#     # Close the current window
+#     window.destroy()
+
+#     # Create a new game instance
+#     game = Game(level=1,theme)  # Replace YourGameClass() with your actual game class
+
+#     # Display the main game interface again
+#     display_main_game_interface(game)
+
 
 def game_over(result: bool, fenetre):
     if result:
@@ -223,9 +235,10 @@ def game_over(result: bool, fenetre):
 
     def on_image_click(event):
         if event.x < 250:
-            main() #la fonctionn qui redemande la difficulté et le thème afin de relancer une nouvelle partie
-        else:
+            main1() #la fonctionn qui redemande la difficulté et le thème afin de relancer une nouvelle partie
+        else :
             close_all_windows() #la fonction qui ferme le jeu complètement. Pour l'instant on ne ferme que la fenêtre de jeu
+
 
 # Function to be called when the top part of the image is clicked
 # Main function to create the Tkinter GUI
@@ -258,10 +271,10 @@ def game_over(result: bool, fenetre):
     create_gui()
 
 
-def close_all_windows():
-    for fen in window.winfo_children():
-        if isinstance(fen, tk.Toplevel):
-            fen.destroy()
+    def close_all_windows():
+        for fen in window.winfo_children():
+            if isinstance(fen, tk.Toplevel):
+                fen.destroy()
 
 
 def display_main_game_interface(game):
@@ -278,10 +291,9 @@ def display_main_game_interface(game):
 
     front_images = get_front_images(game)
     add_button(frame, "PLAY", font=("Impact", 40), bg='black', fg='white', command=lambda: open_playing_window(game, window, bg, front_images))
-    
-    window.wm_attributes('-transparentcolor','black')
+
     window.mainloop()
 if __name__ == "__main__":
     # Vous pouvez ajouter ici le code pour ajouter du son lorsque le jeu est gagné
-    game = YourGameClass()  # Remplacez YourGameClass() par votre classe de jeu réelle
+    game = game()  # Remplacez YourGameClass() par votre classe de jeu réelle
     display_main_game_interface(game)
