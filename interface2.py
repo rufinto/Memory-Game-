@@ -7,7 +7,7 @@ from cards import get_front_images
 from cards import shuffle_cards
 from PIL import Image, ImageTk
 import pygame
-from SOUNDS import *
+
 # Initialisation de pygame pour la gestion du son
 pygame.init()
 
