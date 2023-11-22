@@ -123,7 +123,7 @@ class Game :
                 card.back = back
                 card.theme = self.theme
         elif (self.level.id == 4):
-            self.special_cards = Card.choose_special_cards(2)
+            self.special_cards = Card.choose_special_cards(4)
             for id in self.special_cards :
                 self.cards.append(id) #we add the special card to the other ones
                 card = Card.get_card_with_id(id)
