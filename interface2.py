@@ -7,15 +7,14 @@ from cards import get_front_images
 from cards import shuffle_cards
 from PIL import Image, ImageTk
 import pygame
-from SOUNDS import *
 # Initialisation de pygame pour la gestion du son
 pygame.init()
 
 # Chargement des sons
-sound_first_page = pygame.mixer.Sound("SOUNDS/sound_first_page.mp3")
-sound_button_play = pygame.mixer.Sound("SOUNDS/sound_button_play.mp3")
-sound_wrong_pair = pygame.mixer.Sound("SOUNDS/sound_wrong_pair.mp3")
-sound_right_pair =pygame.mixer.Sound("SOUNDS/sound_right_pair.mp3")
+sound_first_page = pygame.mixer.Sound("sound_first_page.mp3")
+sound_button_play = pygame.mixer.Sound("sound_button_play.mp3")
+sound_wrong_pair = pygame.mixer.Sound("sound_wrong_pair.mp3")
+sound_right_pair =pygame.mixer.Sound("sound_right_pair.mp3")
 
 def play_sound(sound):
     pygame.mixer.Sound.play(sound)
