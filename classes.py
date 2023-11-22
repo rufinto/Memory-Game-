@@ -64,9 +64,14 @@ class Card :
     
     @classmethod
     def choose_special_cards(cls, number):
-        special_cards_id = [200, 202]
-        #special_cards_id = [200, 201, 202, 203, 204]
-        return rd.sample(special_cards_id, k = number)
+        special_cards_id_1 = [200, 202]
+        special_cards_id_2 = [201, 202]
+        choice = []
+        choice1 = rd.sample(special_cards_id_1, k = number)
+        choice.append(choice1)
+        choice2 = rd.sample(special_cards_id_2, k = number)
+        choice.append(choice2)
+        return rd.choice(choice)
     
 class Level :
     def __init__(self, id, nb_pairs, nb_row, nb_column):

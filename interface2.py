@@ -8,6 +8,7 @@ from cards import shuffle_cards
 from PIL import Image, ImageTk
 
 window_variables = []
+#format : [window]
 
 def create_window( title, color):
     window = tk.Tk()
@@ -35,7 +36,6 @@ def add_button(frame, text, font, bg, fg, command):
     button = tk.Button(frame, text = text,font=font, bg=bg, fg=fg, command = command)
     button.pack()
     frame.pack(expand="Yes")
-    print("========ok boutton")
 
 def open_playing_window(game, window, bg, front_images):
 
@@ -60,7 +60,6 @@ def open_playing_window(game, window, bg, front_images):
     window_variables.append(attempts_label)
     attempts_label.pack(fill = "both", expand=True)     
     countdown_label = tk.Label(playing_window, text="", font=("Helvetica", 20))
-    window_variables.append(countdown_label)
     countdown_label.pack(fill = "both", expand=True)
     
     display_init_fronts(game = game, can = can, playing_window = playing_window, rows = rows, columns = columns, line_height = line_height, column_width = column_width, list = front_images, back_image = back_image, countdown_label = countdown_label, attempts_label = attempts_label )    
@@ -240,9 +239,9 @@ def on_click(game, event, can, images_id, list, line_height, column_width, back_
                             game.matched_pairs += 1 #une paire en plus est trouvée
                 else :
                     if card.power == 1:
-                        window_variables[3] = special1_2(game, can, playing_window, countdown_label, attempts_label, 1)
+                        special1_2(game, can, playing_window, countdown_label, attempts_label, 1)
                     elif card.power == 2:
-                        window_variables[3] = special1_2(game, can, playing_window, countdown_label, attempts_label, 2)
+                        special1_2(game, can, playing_window, countdown_label, attempts_label, 2)
                     if (card.power == 3):
                         game.flipped.append(card.id) 
                         special3(game, can, images_id, list)
@@ -282,5 +281,3 @@ def display_main_game_interface(game):
     front_images = get_front_images(game)
     add_button(frame, "PLAY", font=("Tahoma",20), bg=bg, fg='black', command = lambda : open_playing_window(game, window, bg, front_images))
     window.mainloop()
-    
-    
