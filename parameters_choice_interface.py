@@ -6,7 +6,7 @@ from cards import get_card_position
 from cards import get_front_images
 from cards import shuffle_cards
 from PIL import Image, ImageTk
-from interface2 import *
+from interface2 import create_window, display_main_game_interface
 
 def open_pseudo_window():
     def init_player():
@@ -14,13 +14,16 @@ def open_pseudo_window():
         print(player.name)
         name.destroy()
         open_parameters_window()
-    name = create_window('Saisissez votre pseudo joueur','#C597FF')
+    name = tk.Tk()
+    name.minsize(600,600)
+    name.title('Choose a pseudo')
+    name.config(bg = '#C597FF')
     pseudo = tk.StringVar()
-    tk.Label(name,text = 'Name').grid(row = 0)
+    tk.Label(name,text = 'Pseudo',font=("Tahoma",20)).place(relx = 0.2, rely = 0.4, anchor = tk.CENTER)
     pseudo = tk.Entry(name)
-    pseudo.grid(row = 0, column = 1)
-    tk.Button(name, text = 'Quit', command = name.quit).grid(row = 3, column = 0, sticky = tk.W, pady = 4)
-    tk.Button(name, text = 'Confirm', command=init_player).grid(row = 3, column = 1, sticky = tk.W, pady = 4)
+    pseudo.place(relx=0.45, rely = 0.4, anchor = tk.CENTER)
+    tk.Button(name, text = 'Quit', command = name.quit,font=("Tahoma",20)).place(relx=0.5, rely=0.85, anchor=tk.CENTER)
+    tk.Button(name, text = 'Confirm', command=init_player,font=("Tahoma",20)).place(relx = 0.8, rely = 0.4, anchor = tk.CENTER)
     name.mainloop()
 
 def open_parameters_window(): 
@@ -43,13 +46,13 @@ def open_parameters_window():
             display_main_game_interface(game)
         theme_window = create_window('Select a theme','#C597FF')
         theme_var = tk.IntVar()
-        tk.Label(theme_window, text = 'Select theme', justify = tk.LEFT).pack()
-        tk.Radiobutton(theme_window,text = "assos CS",value=1,variable=theme_var,command=init_globale).pack(anchor=tk.W)
-        tk.Radiobutton(theme_window,text = "duos iconiques",value=2,variable=theme_var,command=init_globale).pack(anchor=tk.W)
-        tk.Radiobutton(theme_window,text = "géographie des monuments",value=3,variable=theme_var,command=init_globale).pack(anchor=tk.W)
-    tk.Label(level_window, text = 'Select difficulty', justify = tk.LEFT).pack()
-    tk.Radiobutton(level_window,text = "4 paires",value=1,variable=id_level_var,command=ShowChoice).pack()
-    tk.Radiobutton(level_window,text = "8 paires",value=2,variable=id_level_var,command=ShowChoice).pack()
-    tk.Radiobutton(level_window,text = "10 paires",value=3,variable=id_level_var,command=ShowChoice).pack()
-    tk.Radiobutton(level_window,text = "12 paires",value=4,variable=id_level_var,command=ShowChoice).pack()
+        tk.Label(theme_window, text = 'Select theme',font=("Tahoma",20)).place(relx = 0.5, rely = 0.2, anchor = tk.CENTER)
+        tk.Radiobutton(theme_window,text = "assos CS",value=1,variable=theme_var,command=init_globale,font=("Tahoma",20)).place(relx = 0.5, rely = 0.4, anchor = tk.CENTER)
+        tk.Radiobutton(theme_window,text = "duos iconiques",value=2,variable=theme_var,command=init_globale,font=("Tahoma",20)).place(relx = 0.5, rely = 0.6, anchor = tk.CENTER)
+        tk.Radiobutton(theme_window,text = "géographie des monuments",value=3,variable=theme_var,command=init_globale,font=("Tahoma",20)).place(relx = 0.5, rely = 0.8, anchor = tk.CENTER)
+    tk.Label(level_window, text = 'Select difficulty',font=("Tahoma",20)).place(relx = 0.5, rely = 0.2, anchor = tk.CENTER)
+    tk.Radiobutton(level_window,text = "4 paires",value=1,variable=id_level_var,command=ShowChoice,font=("Tahoma",20)).place(relx = 0.25, rely = 0.45, anchor = tk.CENTER)
+    tk.Radiobutton(level_window,text = "8 paires",value=2,variable=id_level_var,command=ShowChoice,font=("Tahoma",20)).place(relx = 0.25, rely = 0.7, anchor = tk.CENTER)
+    tk.Radiobutton(level_window,text = "10 paires",value=3,variable=id_level_var,command=ShowChoice,font=("Tahoma",20)).place(relx = 0.75, rely = 0.45, anchor = tk.CENTER)
+    tk.Radiobutton(level_window,text = "12 paires",value=4,variable=id_level_var,command=ShowChoice,font=("Tahoma",20)).place(relx = 0.75, rely = 0.7, anchor = tk.CENTER)
     tk.mainloop()

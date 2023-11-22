@@ -6,6 +6,7 @@ from cards import get_card_position
 from cards import get_front_images
 from cards import shuffle_cards
 from PIL import Image, ImageTk
+from cards import *
 
 window_variables = []
 
@@ -78,6 +79,8 @@ def display_init_fronts(game, can : Canvas, playing_window, rows, columns, line_
     display_attempts(game, attempts_label)
     
 def display_result(game, can, playing_window, result): #change la fenetre de jeu pour afficher game over or win 
+    def restart():
+       open_pseudo_window()
     bg = '#C597FF'
     can.destroy()
     playing_window.minsize(500,500)
@@ -86,7 +89,7 @@ def display_result(game, can, playing_window, result): #change la fenetre de jeu
         create_label(playing_window, "GAME OVER", ("Tahoma",20), bg, 'white' )
     if (result == 1):
         create_label(playing_window, "WELL DONE ! YOU WON THIS GAME", ("Tahoma",20), bg, 'white' )
-    add_button(frame, "PLAY AGAIN", font=("Tahoma",20), bg=bg, fg='black', command = lambda : display_main_game_interface(game))
+    add_button(frame, "PLAY AGAIN", font=("Tahoma",20), bg=bg, fg='black', command = lambda : restart())
     add_button(frame, "QUIT", font=("Tahoma",20), bg=bg, fg='black', command = lambda : window_variables[0].destroy())    
     
 def update_init_countdown(game, can, playing_window, countdown_label, attempts_label, seconds_left, images_id, back_image):
@@ -266,6 +269,56 @@ def create_grid(window, width, height, bg, rows, columns): #creee un canva avec 
     can.grid(row = 0, column = 0, rowspan = rows, columnspan = columns)
     can.pack(expand='yes')
     return can
+
+def open_pseudo_window():
+    def init_player():
+        player = Player(pseudo.get())
+        print(player.name)
+        name.destroy()
+        open_parameters_window()
+    name = tk.Tk()
+    name.minsize(600,600)
+    name.title('Choose a pseudo')
+    name.config(bg = '#C597FF')
+    pseudo = tk.StringVar()
+    tk.Label(name,text = 'Pseudo',font=("Tahoma",20)).place(relx = 0.2, rely = 0.4, anchor = tk.CENTER)
+    pseudo = tk.Entry(name)
+    pseudo.place(relx=0.45, rely = 0.4, anchor = tk.CENTER)
+    tk.Button(name, text = 'Quit', command = name.quit,font=("Tahoma",20)).place(relx=0.5, rely=0.85, anchor=tk.CENTER)
+    tk.Button(name, text = 'Confirm', command=init_player,font=("Tahoma",20)).place(relx = 0.8, rely = 0.4, anchor = tk.CENTER)
+    name.mainloop()
+
+def open_parameters_window(): 
+    level_window = create_window('Choose difficulty', '#C597FF')
+    id_level_var = tk.IntVar()
+    def ShowChoice():
+        level_window.destroy()
+        if id_level_var.get() == 1:
+            level_var = Level(id = 1, nb_pairs = 4, nb_row = 2, nb_column = 4)
+        elif id_level_var.get() == 2:
+            level_var = Level(id = 2, nb_pairs = 7, nb_row = 4, nb_column = 4)
+        elif id_level_var.get() == 3:
+            level_var = Level(id = 3, nb_pairs = 9, nb_row = 4, nb_column = 5)
+        elif id_level_var.get() == 4:
+            level_var = Level(id = 4, nb_pairs = 10, nb_row = 4, nb_column = 6)
+        def init_globale():
+            theme = theme_var.get()
+            print(theme)
+            game = Game(level_var,theme)
+            theme_window.destroy()
+            display_main_game_interface(game)
+        theme_window = create_window('Select a theme','#C597FF')
+        theme_var = tk.IntVar()
+        tk.Label(theme_window, text = 'Select theme',font=("Tahoma",20)).place(relx = 0.5, rely = 0.2, anchor = tk.CENTER)
+        tk.Radiobutton(theme_window,text = "assos CS",value=1,variable=theme_var,command=init_globale,font=("Tahoma",20)).place(relx = 0.5, rely = 0.4, anchor = tk.CENTER)
+        tk.Radiobutton(theme_window,text = "duos iconiques",value=2,variable=theme_var,command=init_globale,font=("Tahoma",20)).place(relx = 0.5, rely = 0.6, anchor = tk.CENTER)
+        tk.Radiobutton(theme_window,text = "géographie des monuments",value=3,variable=theme_var,command=init_globale,font=("Tahoma",20)).place(relx = 0.5, rely = 0.8, anchor = tk.CENTER)
+    tk.Label(level_window, text = 'Select difficulty',font=("Tahoma",20)).place(relx = 0.5, rely = 0.2, anchor = tk.CENTER)
+    tk.Radiobutton(level_window,text = "4 paires",value=1,variable=id_level_var,command=ShowChoice,font=("Tahoma",20)).place(relx = 0.25, rely = 0.45, anchor = tk.CENTER)
+    tk.Radiobutton(level_window,text = "8 paires",value=2,variable=id_level_var,command=ShowChoice,font=("Tahoma",20)).place(relx = 0.25, rely = 0.7, anchor = tk.CENTER)
+    tk.Radiobutton(level_window,text = "10 paires",value=3,variable=id_level_var,command=ShowChoice,font=("Tahoma",20)).place(relx = 0.75, rely = 0.45, anchor = tk.CENTER)
+    tk.Radiobutton(level_window,text = "12 paires",value=4,variable=id_level_var,command=ShowChoice,font=("Tahoma",20)).place(relx = 0.75, rely = 0.7, anchor = tk.CENTER)
+    tk.mainloop()
 
 def display_main_game_interface(game):
     if (len(window_variables) > 0):
