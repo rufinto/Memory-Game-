@@ -309,9 +309,11 @@ def open_parameters_window():
     tk.Radiobutton(level_window,text = "12 paires",value=4,variable=id_level_var,command= lambda : ShowChoice(level_window,id_level_var),font=("Tahoma",20)).place(relx = 0.75, rely = 0.7, anchor = tk.CENTER)
     level_window.mainloop()
 
+def play():
+    window_variables[0].destroy()
+    open_parameters_window()
+
 def display_result(game, can, playing_window, result): #change la fenetre de jeu pour afficher game over or win 
-    def restart():
-        open_parameters_window()
     bg = '#C597FF'
     can.destroy()
     playing_window.minsize(500,500)
@@ -320,7 +322,7 @@ def display_result(game, can, playing_window, result): #change la fenetre de jeu
         create_label(playing_window, "GAME OVER", ("Tahoma",20), bg, 'white' )
     if (result == 1):
         create_label(playing_window, "WELL DONE ! YOU WON THIS GAME", ("Tahoma",20), bg, 'white' )
-    add_button(frame, "PLAY AGAIN", font=("Tahoma",20), bg=bg, fg='black', command = lambda : restart())
+    add_button(frame, "PLAY AGAIN", font=("Tahoma",20), bg=bg, fg='black', command = play)
     add_button(frame, "QUIT", font=("Tahoma",20), bg=bg, fg='black', command = lambda : window_variables[0].destroy())
 
 def display_main_game_interface(game):
