@@ -10,13 +10,15 @@ from interface2 import *
 
 def open_pseudo_window():
     def init_player():
-        player = Player(player_name)
+        player = Player(pseudo.get())
+        print(player.name)
         name.destroy()
         open_parameters_window()
     name = create_window('Saisissez votre pseudo joueur','#C597FF')
+    pseudo = tk.StringVar()
     tk.Label(name,text = 'Name').grid(row = 0)
-    player_name = tk.Entry(name)
-    player_name.grid(row = 0, column = 1)
+    pseudo = tk.Entry(name)
+    pseudo.grid(row = 0, column = 1)
     tk.Button(name, text = 'Quit', command = name.quit).grid(row = 3, column = 0, sticky = tk.W, pady = 4)
     tk.Button(name, text = 'Confirm', command=init_player).grid(row = 3, column = 1, sticky = tk.W, pady = 4)
     name.mainloop()
