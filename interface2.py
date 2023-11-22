@@ -51,7 +51,6 @@ def add_button(frame, text, font, bg, fg, command):
 
 def open_playing_window(game, window, bg, front_images):
     
-    play_sound(sound_first_page)
     rows = game.level.nb_row
     columns = game.level.nb_column
     line_height = 700//rows  #hauteur de chaque ligne
@@ -75,6 +74,8 @@ def open_playing_window(game, window, bg, front_images):
     countdown_label = tk.Label(playing_window, text="", font=("Helvetica", 20))
     window_variables.append(countdown_label)
     countdown_label.pack(fill = "both", expand=True)
+    
+    play_sound(sound_first_page)
     
     display_init_fronts(game = game, can = can, playing_window = playing_window, rows = rows, columns = columns, line_height = line_height, column_width = column_width, list = front_images, back_image = back_image, countdown_label = countdown_label, attempts_label = attempts_label )    
     
