@@ -259,7 +259,7 @@ def on_click(game, event, can, images_id, list, line_height, column_width, back_
                         window_variables[3] = special1_2(game, can, playing_window, countdown_label, attempts_label, 2,message_label)
                     if (card.power == 3):
                         game.flipped.append(card.id) 
-                        special3(game, can, images_id, list)
+                        special3(game, can, images_id, list,message_label)
                         
 def hide_unmatched_cards(game, can, images_id, card, previous_card, back_image):
     i, j = get_card_position(game, card.id)
