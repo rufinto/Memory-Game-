@@ -34,11 +34,10 @@ def create_all_cards():
         Card(id = i, front = front_image_path, back = back_image_path, theme =3)
     
     #creation of special cards
-    Card(id = 200, front = "IMAGES/power1.png", back = '', theme = 0, power = 1)
-    Card(id = 201, front = "IMAGES/power2.png", back = '', theme = 0, power = 2)
-    Card(id = 202, front = "IMAGES/power3.png", back = '', theme = 0, power = 3)
-    Card(id = 203, front = "IMAGES/power4.png", back = '', theme = 0, power = 4)
-    Card(id = 204, front = "IMAGES/power5.png", back = '', theme = 0, power = 5)
+    Card(id = 200, front = "IMAGES/power1.png", back = '', theme = 0, power = 1) # +10
+    Card(id = 201, front = "IMAGES/power2.png", back = '', theme = 0, power = 2) # -5
+    Card(id = 202, front = "IMAGES/power3.png", back = '', theme = 0, power = 3) # pair
+    Card(id = 203, front = "IMAGES/power4.png", back = '', theme = 0, power = 4) #shuffle
 
 def associate_all_pairs(theme) -> None :
     CARDS = Card.get_cards() #we fetch the list of all the cards
@@ -53,6 +52,7 @@ def associate_all_pairs(theme) -> None :
 def get_front_images(game): #renvoie une liste de toutes les images face des cartes de la grille, meme indices que la grille
     front_images = []
     grid = game.grid
+    print(game.cards)
     for l in grid :
         front_images.append(['']*len(l))
     nb_rows = game.level.nb_row 

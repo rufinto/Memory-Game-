@@ -12,6 +12,7 @@ window_variables = []
 #format : [window]
 image_variables = []
 #format : [front_images, images_id]
+SHUFFLE = False
 
 def create_window( title, color):
     window = tk.Tk()
@@ -159,7 +160,7 @@ def special1_2(game, can, playing_window, countdown_label, attempts_label, i):
         update_countdown(game, can, playing_window, countdown_label, attempts_label, new_timer)
     return countdown_label
 
-def special4(game, can, front_images, back_image): #shuffle
+def special4(game, can, front_images, back_image): #shuffle 
     new_grid = shuffle_cards(game) #change la grille du jeu 
     rows = game.level.nb_row
     columns = game.level.nb_column
@@ -178,7 +179,7 @@ def special4(game, can, front_images, back_image): #shuffle
             k,l = get_card_position(game, new_id)
             new_front_images[i][j] = front_images[k][l]
             new_images_id[i][j] = can.create_image(j*column_width + column_width/2 , i*line_height + line_height/2, image = front_images[k][l])
-    
+                
     image_variables[0] = new_front_images
     image_variables[1] = new_images_id 
     
@@ -186,9 +187,9 @@ def special4(game, can, front_images, back_image): #shuffle
     game.flipped = []
     game.matched_pairs = 0
     
-    for list in new_images_id: #affichage des dos
-        for image_id in list : 
-            can.itemconfig(image_id, image = back_image)
+    for i in range(rows): #on les affichent
+        for j in range(columns):
+            can.itemconfig(new_images_id[i][j], image = back_image)
             
     for id in game.cards :
         card = Card.get_card_with_id(id)
@@ -197,8 +198,6 @@ def special4(game, can, front_images, back_image): #shuffle
     for id in game.special_cards :
         card = Card.get_card_with_id(id)
         card.flipped = False
-    
-    return new_images_id, new_front_images
 
 def special3(game, can, images_id, list):
     for (i,j) in Card.THEMES[game.theme] :
@@ -263,6 +262,7 @@ def on_click(game, event, can, line_height, column_width, back_image, attempts_l
                         else :
                             game.matched_pairs += 1 #une paire en plus est trouvée
                 else :
+                    global SHUFFLE
                     if (card.power == 1):
                         special1_2(game, can, playing_window, countdown_label, attempts_label, 1)
                     elif (card.power == 2):
@@ -270,8 +270,8 @@ def on_click(game, event, can, line_height, column_width, back_image, attempts_l
                     elif (card.power == 3):
                         game.flipped.append(card.id) 
                         special3(game, can, images_id, list)
-                    elif (card.power == 4):
-                        can.itemconfig(images_id[i][j], image = list[i][j])  # On affiche l'image
+                    elif (card.power == 4 and SHUFFLE == False ):
+                        SHUFFLE = True
                         special4(game, can, list, back_image)
                         
 def hide_unmatched_cards(game, can, images_id, card, previous_card, back_image):
