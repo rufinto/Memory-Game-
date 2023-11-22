@@ -168,7 +168,7 @@ def special1_2(game, can, playing_window, countdown_label, attempts_label, i,mes
         update_countdown(game, can, playing_window, countdown_label, attempts_label, new_timer)
     return countdown_label
 
-def special4(game, can, playing_window, images_id, front_images, countdown_label, attempts_label, back_image,message_label): 
+def special4(game, can, playing_window, images_id, front_images, countdown_label, attempts_label, back_image,message_widget=None): 
     new_grid = shuffle_cards(game) #change la grille du jeu 
     #reafficher toutes les cartes : il faut changer images_id et front_images
     rows = game.level.nb_row
@@ -190,10 +190,10 @@ def special4(game, can, playing_window, images_id, front_images, countdown_label
             new_images_id[i][j] = can.create_image(j*column_width + column_width/2 , i*line_height + line_height/2, image = front_images[k][l])
     game.grid = new_grid
     update_init_countdown(game, can , playing_window, countdown_label, attempts_label, 3, new_images_id, back_image)
-    message_label.config(text="La grille est mélangée")
+    message_widget.config(text="La grille est mélangée")
     return new_images_id, new_front_images
 
-def special3(game, can, images_id, list,message_label):#elle affiche une pair
+def special3(game, can, images_id, list,message_widget=None):#elle affiche une pair
     for (i,j) in Card.THEMES[game.theme] :
         if i in game.cards and i not in game.flipped:
             k,l = get_card_position(game, i)
@@ -207,7 +207,7 @@ def special3(game, can, images_id, list,message_label):#elle affiche une pair
             game.matched_pairs += 1
             game.flipped.append(i)
             game.flipped.append(j)
-            message_label.config(text="Une paire est affichée!!")
+            message_widget.config(text="Une paire est affichée!!")
             return i,j
 
 def on_click(game, event, can, images_id, list, line_height, column_width, back_image, attempts_label, countdown_label, playing_window):
