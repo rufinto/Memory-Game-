@@ -17,7 +17,10 @@ def open_pseudo_window():
     name = tk.Tk()
     name.minsize(600,600)
     name.title('Choose a pseudo')
-    name.config(bg = '#C597FF')
+    background_image = Image.open("fond1.jpg")  # Remplacez "votre_image.jpg" par le chemin de votre image
+    background_image = ImageTk.PhotoImage(background_image)
+
+    name.config(bg =background_image)
     pseudo = tk.StringVar()
     tk.Label(name,text = 'Pseudo',font=("Tahoma",20)).place(relx = 0.2, rely = 0.4, anchor = tk.CENTER)
     pseudo = tk.Entry(name)
