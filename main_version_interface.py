@@ -1,7 +1,6 @@
 from cards import *
 from classes import *
 from interface2 import *
-from parameters_choice_interface import *
 
 def main():
     create_all_cards()
