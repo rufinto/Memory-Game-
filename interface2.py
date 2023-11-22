@@ -77,9 +77,11 @@ def display_init_fronts(game, can : Canvas, playing_window, rows, columns, line_
     update_init_countdown(game, can, playing_window, countdown_label, attempts_label,  3, images_id, back_image) #on lance le decompte initiale
     can.bind("<Button-1>", lambda event : on_click(game, event, can, images_id, list, line_height, column_width, back_image, attempts_label, countdown_label, playing_window )) #"<Button-1>" : clic bouton gauche
     display_attempts(game, attempts_label)
-    
+
 def display_result(game, can, playing_window, result): #change la fenetre de jeu pour afficher game over or win 
-    def restart():
+    def restart(game):
+        del(game.level)
+        del(game)
         open_parameters_window()
     bg = '#C597FF'
     can.destroy()
@@ -89,9 +91,9 @@ def display_result(game, can, playing_window, result): #change la fenetre de jeu
         create_label(playing_window, "GAME OVER", ("Tahoma",20), bg, 'white' )
     if (result == 1):
         create_label(playing_window, "WELL DONE ! YOU WON THIS GAME", ("Tahoma",20), bg, 'white' )
-    add_button(frame, "PLAY AGAIN", font=("Tahoma",20), bg=bg, fg='black', command = lambda : restart())
+    add_button(frame, "PLAY AGAIN", font=("Tahoma",20), bg=bg, fg='black', command = lambda : restart(game))
     add_button(frame, "QUIT", font=("Tahoma",20), bg=bg, fg='black', command = lambda : window_variables[0].destroy())    
-    
+
 def update_init_countdown(game, can, playing_window, countdown_label, attempts_label, seconds_left, images_id, back_image):
     countdown_label.config(text=str(seconds_left))
     if seconds_left > 0:
