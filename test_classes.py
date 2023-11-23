@@ -1,7 +1,7 @@
 import pytest
 from classes import * 
 from IMAGES import *
-
+import random as rd
 # teste les méthodes de la classe Card
 
 id = 12
@@ -16,3 +16,5 @@ def test_Card():
     card_test.flip()
     assert card_test.is_flipped() == True
     assert Card.get_card_with_id(id) == card_test
+
+def test_level()
