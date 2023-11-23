@@ -24,9 +24,9 @@ class Card :
 }
     
     def __init__(self, id, front, back, theme, flipped = False, pair = None, power = 0):
-        self.id = id
-        self.front = front
-        self.back = back
+        self.id = id 
+        self.front = front # front = f"{id}.png"
+        self.back = back # back = f"back{theme}.png"
         self.theme = theme
         self.flipped = flipped # False if the card is hidden
         self.pair = pair #id of its pair

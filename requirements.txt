@@ -1,3 +1,5 @@
+To run the projet you need to install all these librairies:
+
 Pillow==10.0.1
 pygame==2.5.2
 pytest==7.4.3

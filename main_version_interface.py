@@ -12,4 +12,3 @@ def main():
 
 #while(not game.is_finished()): #tant que le jeu n'est pas terminée on enregistre les choix du joueur 
 main()
-

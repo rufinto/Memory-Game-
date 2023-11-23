@@ -1,1 +1,4 @@
-__pycache__
+__pycache_
+vs.code
+.DS_Store
+test.py
