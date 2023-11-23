@@ -1,7 +1,7 @@
 import random as rd
 
 class Card :
-    CARDS = []
+    CARDS = [] #list used to conserve the cards once they have been created
 
     THEMES = {
     1: [
@@ -22,15 +22,19 @@ class Card :
         (148, 149)
     ]
 }
+    #theme 1 : ASSOS DE CS
+    #theme 2 : cinéma
+    #theme 3 : géographie 
+    
     def __init__(self, id, front, back, theme, flipped = False, pair = None, power = 0):
         self.id = id
-        self.front = front
-        self.back = back
-        self.theme = theme
+        self.front = front #image of the front
+        self.back = back #image of the back
+        self.theme = theme #a card is associated to a theme 
         self.flipped = flipped # False if the card is hidden
         self.pair = pair #id of its pair
-        self.power = power #0 if it is not a special card
-        Card.CARDS.append(self)
+        self.power = power #0 if it is not a special card (always the case in the MVP)
+        Card.CARDS.append(self) #when a card is created, it is automatically added to the list CARDS
     
     def is_pair_of(self, card):
         return self.pair is card.id
@@ -38,11 +42,11 @@ class Card :
     def is_flipped(self): #return True if the card is flipped 
         return self.flipped is True
     
-    def flip(self):
+    def flip(self): #turnaround
         self.flipped = not self.flipped
         
     @classmethod
-    def get_card_with_id(cls,id):
+    def get_card_with_id(cls,id): 
         for card in cls.CARDS :
             if card.id == id:
                 return card
@@ -58,8 +62,8 @@ class Card :
     
 class Level :
     def __init__(self, id, nb_pairs, nb_row, nb_column):
-        self.id = id
-        self.nb_pairs = nb_pairs
+        self.id = id #level difficulty (default = 1 in the MVP)
+        self.nb_pairs = nb_pairs 
         self.nb_row = nb_row
         self.nb_column = nb_column
     
@@ -76,28 +80,28 @@ class Game :
         self.init_game()
         self.init_grid()
         
-    def init_game(self):
+    def init_game(self): #initialisation of the game 
         level = self.level
         nb_pairs = level.nb_pairs
-        pairs = rd.sample(Card.THEMES[self.theme], k = nb_pairs)
-        for (i,j) in pairs :
-            self.cards.append(i)
-            self.cards.append(j)
-        rd.shuffle(self.cards)
+        pairs = rd.sample(Card.THEMES[self.theme], k = nb_pairs) #sample allows to avoid selecting twice the same pair
+        for (i,j) in pairs : #for each pair
+            self.cards.append(i) #we add the first card...
+            self.cards.append(j) #... and its pair
+        rd.shuffle(self.cards) #shuffle in order to seperate a card from its pair 
             
-    def init_grid(self):
+    def init_grid(self): #initialisation of the grid once the game has been initialised 
         grid = []
         level = self.level
         nb_row = level.nb_row
         nb_column = level.nb_column
-        cards = self.cards.copy()
-        rd.shuffle(cards)
-        for i in range(0,(nb_row-1)*nb_column + 1, nb_column ):
+        cards = self.cards.copy() #copy of the cards list
+        rd.shuffle(cards) 
+        for i in range(0,(nb_row-1)*nb_column + 1, nb_column):
             grid.append(cards[i:i+nb_column])
         self.grid = grid
 
-    def is_finished(self): #game over if all pairs have been discovered or all attemps have been used 
+    def is_finished(self): #game over if all pairs have been discovered
         return (self.matched_pairs is self.level.nb_pairs)
 
-    def get_back(self):
+    def get_back(self): #there is a single back available for a game (only one theme)
         return "DATA_MVP/IMAGES/back" + str(self.level.id) + ".png"
