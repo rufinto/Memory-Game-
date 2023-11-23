@@ -17,4 +17,15 @@ def test_Card():
     assert card_test.is_flipped() == True
     assert Card.get_card_with_id(id) == card_test
 
-def test_level()
+def test_level():
+    level = Level(id = 4, nb_pairs = 11, nb_row = 4, nb_column = 6)
+    assert level.id == 4
+    assert level.nb_pairs == 11
+    assert level.nb_row == 4
+    assert level.nb_column == 6
+
+def test_game():
+    level = Level(id = 4, nb_pairs = 11, nb_row = 4, nb_column = 6)
+    game = Game(level, theme)
+    game.init_game()
+    assert len(game.cards) == 2*game.level.nb_pairs
