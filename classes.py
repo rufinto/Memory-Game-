@@ -22,7 +22,6 @@ class Card :
         (148, 149)
     ]
 }
-    
     def __init__(self, id, front, back, theme, flipped = False, pair = None, power = 0):
         self.id = id
         self.front = front
@@ -64,9 +63,14 @@ class Card :
     
     @classmethod
     def choose_special_cards(cls, number):
-        special_cards_id = [200, 202]
-        #special_cards_id = [200, 201, 202, 203, 204]
-        return rd.sample(special_cards_id, k = number)
+        special_cards_id_1 = [200, 202, 203]
+        special_cards_id_2 = [201, 202, 203]
+        choice = []
+        choice1 = rd.sample(special_cards_id_1, k = number)
+        choice.append(choice1)
+        choice2 = rd.sample(special_cards_id_2, k = number)
+        choice.append(choice2)
+        return rd.choice(choice)
     
 class Level :
     def __init__(self, id, nb_pairs, nb_row, nb_column):
@@ -74,7 +78,7 @@ class Level :
         self.nb_pairs = nb_pairs
         self.nb_row = nb_row
         self.nb_column = nb_column
-        self.timer = id*20 #time the player has before losing the game 
+        self.timer = 40*self.id #time the player has before losing the game 
         self.max_attempts = 4*nb_pairs
     
 class Game :
@@ -88,13 +92,13 @@ class Game :
         self.matched_pairs = 0 #number of pairs discovered 
         self.grid = [] #list of list containing the cards id that are in the grid
         self.started = False
-        self.init_game()
         self.init_special_cards()
+        self.init_game()
         self.init_grid()
         
     def init_game(self):
         level = self.level
-        nb_pairs = level.nb_pairs 
+        nb_pairs = level.nb_pairs
         pairs = rd.sample(Card.THEMES[self.theme], k = nb_pairs)
         for (i,j) in pairs :
             self.cards.append(i)
@@ -115,15 +119,8 @@ class Game :
     
     def init_special_cards(self):
         back = self.get_back()
-        if (self.level.id == 2 or self.level.id == 3):
+        if (self.level.id > 1) :
             self.special_cards = Card.choose_special_cards(2)
-            for id in self.special_cards :
-                self.cards.append(id) #we add the special card to the other ones
-                card = Card.get_card_with_id(id)
-                card.back = back
-                card.theme = self.theme
-        elif (self.level.id == 4):
-            self.special_cards = Card.choose_special_cards(4)
             for id in self.special_cards :
                 self.cards.append(id) #we add the special card to the other ones
                 card = Card.get_card_with_id(id)
@@ -136,8 +133,3 @@ class Game :
     def get_back(self):
         return "IMAGES/back" + str(self.level.id) + ".png"
 
-class Player:
-    def __init__(self, name):
-        self.name = name
-        self.score = 0
-    
