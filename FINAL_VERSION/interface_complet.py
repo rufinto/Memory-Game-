@@ -10,6 +10,8 @@ from cards import shuffle_cards
 
 import time 
 
+from sounds import *
+
 window_variables = []
 #format : [window]
 image_variables = []
@@ -53,7 +55,7 @@ def create_icanva(window, bg, w, h, x, y, image):
 
 
 def open_playing_window(game, window, i_variables, bg, front_images, start, frame):
-    #detruire le bouton play :
+    play_sound(sound_button)
     start.destroy()
     frame.destroy()
     global image_variables
@@ -181,7 +183,7 @@ def special1_2(game, can, playing_window, countdown_label, attempts_label, i):
 
     def special1(playing_window, countdown_label): #ajoute 10s au chrono
         if countdown_label.winfo_exists():  # Vérifie si le label existe encore
-            
+            play_sound(sound_good)
             message_text = "Youpii You won 10 seconds!!"    
             message_frame = tk.Frame(can, bd=5, relief=tk.SOLID)
             message_frame.place(relx=0.5, rely=0.5, anchor="center")
@@ -209,6 +211,16 @@ def special1_2(game, can, playing_window, countdown_label, attempts_label, i):
     return countdown_label
 
 def special4(game, playing_window, can, front_images, back_image): #shuffle 
+    message_text = "The cards are being shuffeled...."
+    play_sound(sound_shuffle)
+    message_frame = tk.Frame(can, bd=5, relief=tk.SOLID)
+    message_frame.place(relx=0.5, rely=0.5, anchor="center")
+    message_element = tk.Label(message_frame, text=message_text, font=("Helvetica", 20), fg="black")
+    message_element.pack(padx=10, pady=10) 
+    playing_window.update()
+    time.sleep(1)
+    message_frame.destroy()
+    
     new_grid = shuffle_cards(game) #change la grille du jeu 
     rows = game.level.nb_row
     columns = game.level.nb_column
@@ -247,16 +259,8 @@ def special4(game, playing_window, can, front_images, back_image): #shuffle
         card = Card.get_card_with_id(id)
         card.flipped = False
 
-    message_text = "The cards have been shuffeled...."
-    message_frame = tk.Frame(can, bd=5, relief=tk.SOLID)
-    message_frame.place(relx=0.5, rely=0.5, anchor="center")
-    message_element = tk.Label(message_frame, text=message_text, font=("Helvetica", 20), fg="black")
-    message_element.pack(padx=10, pady=10) 
-    playing_window.update()
-    time.sleep(1)
-    message_frame.destroy()
-
 def special3(game, playing_window, can, images_id, list):
+    play_sound(sound_good)
     message_text = "A pair is revealed !!" 
     message_frame = tk.Frame(can, bd=5, relief=tk.SOLID)
     message_frame.place(relx=0.5, rely=0.5, anchor="center")
@@ -294,7 +298,7 @@ def on_click(game, event, can, line_height, column_width, back_image, attempts_l
             return row, column
         else:
             return None, None
-        
+    
     list = image_variables[0]
     images_id = image_variables[1]
     
@@ -308,15 +312,18 @@ def on_click(game, event, can, line_height, column_width, back_image, attempts_l
             if not card.flipped and card.id not in game.flipped:  # Vérifie si la carte n'est pas déjà retournée et n'est pas déjà appariée
                 card.flipped = True
                 can.itemconfig(images_id[i][j], image = list[i][j])  # On affiche l'image
+                play_sound(sound_flip)
                 if (card.power == 0):
                     game.flipped.append(card.id) #on met pas les cartes speciales dans flipped à part la 3
                     if ((len(game.flipped) % 2 == 0 and 202 not in game.flipped)):
                         previous_try_id = game.flipped[-2]
                         previous_card = Card.get_card_with_id(previous_try_id)
                         if card.is_pair_of(previous_card) == False:
+                            play_sound(sound_wrongpair)                  
                             can.after(1000, lambda: hide_unmatched_cards(game, can, images_id, card, previous_card, back_image))
                         else :
-                            game.matched_pairs += 1 #une paire en plus est trouvée                        
+                            game.matched_pairs += 1 #une paire en plus est trouvée
+                            play_sound(sound_rightpair)                  
                     elif (202 in game.flipped and len(game.flipped) % 2 == 0) : #cas ou on avait deja une paire
                         game.flipped.remove(202) #on enleve la carte spe 3
                     elif (202 in game.flipped and (len(game.flipped) -1 ) % 2 == 0) : #cas ou on avait pas deja une paire
