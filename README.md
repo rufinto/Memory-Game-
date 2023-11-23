@@ -1,8 +1,51 @@
-# Memory Game with Tkinter
+# Memory Game - Projet de Développement
 
-## Overview
+Bienvenue dans le projet de développement collaboratif du jeu de mémoire en utilisant Python et Tkinter pour l'interface graphique. Ce projet est une initiative de groupe, conçu avec les principes de la programmation orientée objet, suit les pratiques du développement piloté par les tests (TDD), et propose différents thèmes tels que le cinéma, les monuments, les associations étudiantes de CS.
 
-This project is a group effort to create a memory game using Python and Tkinter for the graphical interface. The game is designed with object-oriented programming principles, follows test-driven development (TDD) practices, and features different themes such as cinema, monuments, student associations, and music.
+## Introduction
+Le jeu Memory est une excellente façon d'exercer votre mémoire tout en vous amusant. Ce projet vise à créer une version améliorée du jeu Memory en utilisant Python et Tkinter pour l'interface graphique. Nous mettons l'accent sur la collaboration en groupe, en suivant les principes de la programmation orientée objet et en adoptant des pratiques de développement piloté par les tests (TDD).
+
+## À Propos du Jeu Memory
+
+Le jeu doit se lancer avec le bon nombre de paires retournées et placées aléatoirement sur la grille. Au début du jeu, les cartes sont affichées pendant 5 secondes avant d'être cachées. Le joueur doit pouvoir sélectionner la carte qu'il veut retourner en cliquant dessus. Le joueur doit retourner deux cartes à la suite, si les deux cartes constituent une paire (un point est gagné) les cartes restent retournées. Sinon, les deux cartes redeviennt cachées, le joueur ne gagne pas de point. Le jeu se termine lorsque toutes les cartes sont retournées.
+
+## Organisation du Mini-Projet
+
+### Objectif 1 (MVP): Un jeu Memory Minimum
+
+**Sprint 0 - Analyse du problème et réflexion autour de la conception**
+Le jeu doit permettre au joueur de:
+- Générer aléatoirement les cartes de la grille de jeu.
+- Jouer en lui demandant de choisir deux cartes et de vérifier qu’ils appartiennent au même couple.
+- Tester la fin du jeu .
+
+**Sprint 1 - Mise en Place des Données du Jeu**
+- **Fonctionnalité 1 :** Création de toutes les classes nécessaires et les fonctions correspondantes: Card, Game et Player 
+- **Fonctionnalité 2 :** initialiser la grille de cartes en choisissant une disposition initiale aléatoire  .
+
+**Sprint 2 - Première interface graphique**
+- **Fonctionnalité 3 :** création d’une première interface graphique avec le module Tkinter.
+
+**Sprint 3 - Gestion des actions du joueur**
+- **Fonctionnalité 4 :** ajout de boutons pour chaque carte qui permet d’afficher sa face pendant une courte durée 
+
+- **Fonctionnalité 5 :** Gestion des retournements et tester la fin du jeu.
+
+**Sprint 4 - Jouer !**
+- **Fonctionnalité 6 :** Mettre le jeu en marche.
+
+### Objectif 2: Un Memory Game avec une meilleure interface graphique (Amélioration du MVP)
+
+**Sprint 5 - Création de l'interface pour la grille de jeu**
+- **Fonctionnalité 7 :** Mise en place d’une fenêtre principale permettant de choisir le thème et le niveau du jeu et d’une fenêtre permettant de relancer une partie ou fermer le jeu.
+- **Fonctionnalité 6 :** Ajout d’un chronomètre pendant le jeu et de messages.
+
+### Objectif 3: Un Memory Game avec la gestion des joueurs, de leur score et ajout de cartes spéciales.
+- Le jeu dispose de nouvelles fonctions spéciales notamment le calcul du score du joueur et l'ajout de cartes spéciales qui apparaissent pendant le jeu. En plus, des musiques de fond ont été ajoutés pour rendre le jeu plus agréable
+
+
+
+
 
 ## Requirements
 
@@ -27,17 +70,24 @@ This project is a group effort to create a memory game using Python and Tkinter 
     ```bash
     pip install pytest
     pip install tkinter
+    pip install pillow
+    pip install pygame
     ```
 
-## Running the Game
+## Comment Jouer
 
-To run the game, execute the following command in the project root directory:
+1. Lancez le jeu en exécutant le fichier main.py
+2. Observez les cartes et essayez de trouver des paires identiques.
+3. Cliquez sur deux cartes pour les retourner. Si elles sont identiques, elles resteront visibles.
+4. Continuez à tourner les cartes jusqu'à ce que toutes les paires soient trouvées.
 
-```bash
-python main.py
+
+
+Amusez-vous bien en jouant au jeu Memory!
 
 
 
-## Explication Utilité MVP
 
-Le jeu doit se lancer avec le bon nombre de paires retournées et placées aléatoirement sur la grille. Au début du jeu, les cartes sont affichées pendant 5 secondes avant d'être cachées. Le joueur doit pouvoir sélectionner la carte qu'il veut retourner en cliquant dessus. Le joueur doit retourner deux cartes àa la suite, si les deux cartes constituent une paire (, un point est gagné,) les cartes restent retournées. Sinon, les deux cartes redeviennt cachées, le joueur ne gagne pas de point. Le jeu se termine lorsque toutes les cartes sont retournées.
+
+
+
