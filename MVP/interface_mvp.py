@@ -6,7 +6,9 @@ from cards_mvp import get_card_position
 from classes_mvp import *
 from PIL import Image, ImageTk
 
-def create_window( title, color):
+#Tkinter functions used to simplify later functions (creation of window, label, frame, grid, button)
+
+def create_window(title, color): 
     window = tk.Tk()
     window.minsize(500,500)
     window.title(title)
@@ -35,11 +37,14 @@ def add_button(frame, text, font, bg, fg, command):
     frame.pack(expand="Yes")
     return button
 
+
+#launch of the game interface 
+
 def open_playing_window_mvp(game, window, bg, front_images):
     rows = game.level.nb_row
     columns = game.level.nb_column
-    line_height = 700//rows  #hauteur de chaque ligne
-    column_width = 700//columns #largeur de chaque colonne
+    line_height = 700//rows  #height of each line 
+    column_width = 700//columns #width of each column 
     
     card = Card.get_card_with_id(game.cards[0])
     back_image = Image.open(card.back)
@@ -55,7 +60,7 @@ def open_playing_window_mvp(game, window, bg, front_images):
     
     display_init_fronts_mvp(game = game, window=window, can = can, playing_window = playing_window, rows = rows, columns = columns, line_height = line_height, column_width = column_width, list = front_images, back_image = back_image )    
     
-def display_init_fronts_mvp(game, window, can : Canvas, playing_window, rows, columns, line_height, column_width, list, back_image ): #list est la liste des images en format Image
+def display_init_fronts_mvp(game, window, can : Canvas, playing_window, rows, columns, line_height, column_width, list, back_image ): #list : list of the images 
     images_id = []
     for l in list :
         images_id.append(['']*len(l))
@@ -67,7 +72,7 @@ def display_init_fronts_mvp(game, window, can : Canvas, playing_window, rows, co
                 can.itemconfig(image_id, image = back_image)
     can.bind("<Button-1>", lambda event : on_click_mvp(game , window, playing_window, event, can, images_id, list, line_height, column_width, back_image)) #"<Button-1>" : clic bouton gauche
 
-def display_result_mvp(window, can, playing_window): #change la fenetre de jeu pour afficher game over or win 
+def display_result_mvp(window, can, playing_window): #replace the playing window by a window that indicates the player he has completed the game
     bg = '#C597FF'
     can.destroy()
     playing_window.minsize(500,500)
@@ -77,10 +82,10 @@ def display_result_mvp(window, can, playing_window): #change la fenetre de jeu p
 
 def on_click_mvp(game, window, playing_window, event, can, images_id, list, line_height, column_width, back_image):
     def get_clicked_image(event, line_height, column_width):
-        x,y = event.x, event.y #coordonnes du click
-        row = int(y)// line_height #ligne du click
-        column = int(x)// column_width #colonne du click
-        #verifier si le joueur a bien clique sur l'image ou bien sur un espace vide :
+        x,y = event.x, event.y #coordonnes of the click
+        row = int(y)// line_height #line of the click
+        column = int(x)// column_width #column of the click
+        #check whether the player has clicked on the image or on a blanck space :
         center_x = column * column_width + column_width / 2
         center_y = row * line_height + line_height / 2
         if center_x - 113//2 <= x <= center_x + 113//2 and center_y - 170//2 <= y <= center_y + 170//2:
@@ -92,9 +97,9 @@ def on_click_mvp(game, window, playing_window, event, can, images_id, list, line
     if ( (i,j) != (None, None)):
         card_id = game.grid[i][j]
         card = Card.get_card_with_id(card_id)
-        if not card.flipped and card.id not in game.flipped:  # Vérifie si la carte n'est pas déjà retournée et n'est pas déjà appariée
+        if not card.flipped and card.id not in game.flipped:  #Check whether the card is not already flipped or associated to its pair 
             card.flipped = True
-            can.itemconfig(images_id[i][j], image=list[i][j])  # On affiche l'image
+            can.itemconfig(images_id[i][j], image=list[i][j]) #display the image
             game.flipped.append(card.id)
             if (len(game.flipped) % 2 == 0):
                 previous_try_id = game.flipped[-2]
@@ -102,18 +107,18 @@ def on_click_mvp(game, window, playing_window, event, can, images_id, list, line
                 if card.is_pair_of(previous_card) == False:
                     can.after(1000, lambda: hide_unmatched_cards(game, can, images_id, card, previous_card, back_image))
                 else :
-                    game.matched_pairs += 1 #une paire en plus est trouvée                        
+                    game.matched_pairs += 1 #a pair has been discovered                        
         if (game.is_finished()) :
             can.after(1000, lambda: display_result_mvp(window, can, playing_window))
         
 def hide_unmatched_cards(game, can, images_id, card, previous_card, back_image):
     i, j = get_card_position(game, card.id)
-    can.itemconfig(images_id[i][j], image=back_image)  # Retourne la carte actuelle
+    can.itemconfig(images_id[i][j], image=back_image)  #flip the current card 
 
     k, l = get_card_position(game, previous_card.id)
-    can.itemconfig(images_id[k][l], image=back_image)  # Retourne la carte précédente
+    can.itemconfig(images_id[k][l], image=back_image)  #flip the previous one (its pair)
 
-    # Réinitialise les cartes dans la liste des cartes retournées
+    #Re-initialisation of the cards in the list of flipped ones
     card.flipped = False
     previous_card.flipped = False
     game.flipped.remove(card.id)

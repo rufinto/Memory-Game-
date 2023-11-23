@@ -9,6 +9,8 @@ from interface_complet import *
 from cards import get_front_images
 import os 
 
+from sounds import *
+
 OPTIONS = [0,0] #level, theme
 
 def display_main_game_interface():
@@ -17,6 +19,7 @@ def display_main_game_interface():
     bg = '#C597FF'
     path = "DATA/IMAGES/main_bg.png"
     window = create_window("Memory Game", bg)
+    play_sound(sound_window)
     window_variables.append(window)
     create_label (window,"MEMORY GAME", ("Tahoma",40), bg, 'white')
     image = Image.open(path)
@@ -27,6 +30,7 @@ def display_main_game_interface():
     window.mainloop()
 
 def get_options(window):
+    play_sound(sound_button)
     options_window = tk.Toplevel(window)
     options_window.title("Options")
     options_window.minsize(600, 300)
@@ -56,6 +60,7 @@ def get_options(window):
     opt_can.bind("<Button-1>", lambda event: on_can_click(event))
 
     def on_can_click(event):
+        play_sound(sound_button)
         x, y = event.x, event.y
         if 85 <= x <= 185 and 100 <= y <= 200:
             OPTIONS[1] = 1
@@ -87,6 +92,7 @@ def get_options(window):
         level_4.pack()
         
         def validate():
+            play_sound(sound_button)
             level = OPTIONS[0]
             theme = OPTIONS[1]
             game = init_game(level, theme)
