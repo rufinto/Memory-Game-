@@ -10,27 +10,13 @@ from cards import shuffle_cards
 
 import time 
 
+from interface_mvp import *
+
 window_variables = []
 #format : [window]
 image_variables = []
 #format : [front_images, images_id]
 SHUFFLE = False
-
-def create_window( title, color):
-    window = tk.Tk()
-    window.minsize(500,500)
-    window.title(title)
-    window.config(bg = color)
-    return window
-
-def create_label(window, t, f, b, fgg):
-    title_label = tk.Label(window, text = t, font = f, bg = b, fg = fgg)
-    title_label.pack(expand = "yes")
-
-def create_frame(window, background, x, y, w, h):
-    frame = tk.Frame(window, bg = background)
-    frame.place(x=x, y=y, width=w, height=h)
-    return frame
     
 def create_icanva(window, bg, w, h, x, y, image):
     can= tk.Canvas(window, width=w, height= h ,bg = bg,bd=0)
@@ -38,11 +24,6 @@ def create_icanva(window, bg, w, h, x, y, image):
     can.create_image (w//2, h//2, image=image) #w//2 et h//2 sont la position de l'image dans le canva
     can.pack(expand='Yes')
 
-def add_button(frame, text, font, bg, fg, command):
-    button = tk.Button(frame, text = text,font=font, bg=bg, fg=fg, command = command)
-    button.pack()
-    frame.pack(expand="Yes")
-    return button
 
 def open_playing_window(game, window, i_variables, bg, front_images, start):
     #detruire le bouton play :
@@ -50,7 +31,6 @@ def open_playing_window(game, window, i_variables, bg, front_images, start):
     global image_variables
     image_variables = i_variables
     
-    print("===la", len(image_variables))
     rows = game.level.nb_row
     columns = game.level.nb_column
     line_height = 700//rows  #hauteur de chaque ligne
@@ -344,10 +324,3 @@ def hide_unmatched_cards(game, can, images_id, card, previous_card, back_image):
     previous_card.flipped = False
     game.flipped.remove(card.id)
     game.flipped.remove(previous_card.id)
-
-def create_grid(window, width, height, bg, rows, columns): #creee un canva avec une grille
-    can = tk.Canvas(window, width = width, height = height, bg=bg)
-    can.pack()
-    can.grid(row = 0, column = 0, rowspan = rows, columnspan = columns)
-    can.pack(expand='yes')
-    return can   
