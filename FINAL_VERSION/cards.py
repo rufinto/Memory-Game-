@@ -1,13 +1,16 @@
 from classes import Card
+from classes import Game
 import tkinter as tk
 from PIL import Image, ImageTk
 import random as rd
 
-def create_all_cards():
-    card = Card(0, None, None, None) #cree une carte identifié 0 juste pour pas avoir de degalage des nombres
+#creates all the cards that appear in the game
+#returns nothing
+def create_all_cards() -> None:
+    Card(0, None, None, None) #create a card identified by 0, to have each position equals id in CARDS
     
-    #creation of cards for theme 1
-    back_image_path = "DATA/IMAGES/back1.png"
+    #creation of cards for theme 1 :
+    back_image_path = "DATA/IMAGES/back1.png" 
     for i in range(1, 21):
         front_image_path = "DATA/IMAGES/" + str(i) + ".png"
         Card(id = i, front = front_image_path, back = back_image_path, theme = 1)
@@ -15,7 +18,7 @@ def create_all_cards():
         front_image_path = "DATA/IMAGES/" + str(i) + ".png"
         Card(id = i, front = front_image_path, back = back_image_path, theme = 1)
     
-    #creation of cards for theme 2
+    #creation of cards for theme 2 :
     back_image_path = "DATA/IMAGES/back2.png"
     for i in range(21, 41):
         front_image_path = "DATA/IMAGES/" + str(i) + ".png"
@@ -27,18 +30,19 @@ def create_all_cards():
         front_image_path = "DATA/IMAGES/" + str(i) + ".png"
         Card(id = i, front = front_image_path, back = back_image_path, theme = 2)
     
-    #creation of cards for theme 3
+    #creation of cards for theme 3 : 
     back_image_path = "DATA/IMAGES/back3.png"
     for i in range(84, 150):
         front_image_path = "DATA/IMAGES/" + str(i) + ".png"
         Card(id = i, front = front_image_path, back = back_image_path, theme =3)
     
-    #creation of special cards
+    #creation of special cards :
     Card(id = 200, front = "DATA/IMAGES/power1.png", back = '', theme = 0, power = 1) # +10
     Card(id = 201, front = "DATA/IMAGES/power2.png", back = '', theme = 0, power = 2) # -5
-    Card(id = 202, front = "DATA/IMAGES/power3.png", back = '', theme = 0, power = 3) # pair
+    Card(id = 202, front = "DATA/IMAGES/power3.png", back = '', theme = 0, power = 3) # reveal a pair
     Card(id = 203, front = "DATA/IMAGES/power4.png", back = '', theme = 0, power = 4) #shuffle
 
+#for each card of theme, we associate its pair :
 def associate_all_pairs(theme) -> None :
     CARDS = Card.get_cards() #we fetch the list of all the cards
     THEMES = Card.get_themes() #we fetch the dictionary that contains the themes 
@@ -49,7 +53,8 @@ def associate_all_pairs(theme) -> None :
         card1.pair = card2.id #the attribute None becomes the id of the pair 
         card2.pair = card1.id 
 
-def get_front_images(game): #renvoie une liste de toutes les images face des cartes de la grille, meme indices que la grille
+#returns a list of all the front images in the grid as imageTk.PhotoImage :
+def get_front_images(game : Game) -> list:
     front_images = []
     grid = game.grid
     for l in grid :
@@ -64,13 +69,15 @@ def get_front_images(game): #renvoie une liste de toutes les images face des car
             front_images[i][j] = front_image
     return front_images
 
-def get_card_position(game, id : int) -> tuple : #return the row and the column in which the card is positioned 
+#returns the row and the column in which the card is positioned in the grid :
+def get_card_position(game : Game, id : int) -> tuple : 
     for i in range(game.level.nb_row):
         for j in range(game.level.nb_column):
             if (game.grid[i][j] == id) :
                 return i,j 
 
-def shuffle_cards(game): #shuffle all the cards
+#returns a shuffled version of the grid
+def shuffle_cards(game : Game) -> list: 
     grid = []
     cards = game.cards.copy()
     for l in game.grid :

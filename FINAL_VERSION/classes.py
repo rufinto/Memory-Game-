@@ -27,42 +27,43 @@ class Card :
         self.front = front
         self.back = back
         self.theme = theme
-        self.flipped = flipped # False if the card is hidden
-        self.pair = pair #id of its pair
-        self.power = power #0 if it is not a special card
-        Card.CARDS.append(self)
+        self.flipped = flipped # equals False if the card is hidden
+        self.pair = pair #correspond to the id of its pair
+        self.power = power #equals 0 if it is not a special card
+        Card.CARDS.append(self) #we add the card to CARDS
     
-    
-    #if power = 1 : the player has 10 secondes more to complete the game 
-    #if power = 2 : the player has 5 secondes less to complete the game
-    #if power = 3 : a pair is discovered
-    #if power = 4 : we shuffle the cards
-    
-    def is_pair_of(self, card):
+    #returns True if (self,card) is a pair
+    def is_pair_of(self, card ) -> bool:
         return self.pair is card.id
     
-    def is_flipped(self): #return True if the card is flipped 
+    #returns True if the card is flipped 
+    def is_flipped(self) -> bool:
         return self.flipped is True
     
-    def flip(self):
+    #returns True if the card is flipped 
+    def flip(self) -> None:
         self.flipped = not self.flipped
-        
+    
     @classmethod
+    #returns the card identified by id
     def get_card_with_id(cls,id):
         for card in cls.CARDS :
             if card.id == id:
                 return card
     
     @classmethod
+    #returns the list of all cards : CARDS
     def get_cards(cls):
         return cls.CARDS
     
     @classmethod
+    #returns the dictionnary THEMES
     def get_themes(cls):
         return cls.THEMES
     
     @classmethod
-    def choose_special_cards(cls, number):
+    #returns a list of the id of the special cards that will appear in the game
+    def choose_special_cards(cls, number : int):
         special_cards_id_1 = [200, 202, 203]
         special_cards_id_2 = [201, 202, 203]
         choice = []
@@ -79,32 +80,34 @@ class Level :
         self.nb_row = nb_row
         self.nb_column = nb_column
         self.timer = 40*self.id #time the player has before losing the game 
-        self.max_attempts = 4*nb_pairs
+        self.max_attempts = 4*nb_pairs #maximum number of attempts for this level
     
 class Game :
     def __init__(self, level : Level, theme):
         self.level = level
         self.theme = theme
-        self.cards = [] #list of the cards id in the game 
+        self.cards = [] #list of the id of the cards in the game 
         self.special_cards = []
         self.attempts = 0
         self.flipped = [] #list of the cards id which are flipped
         self.matched_pairs = 0 #number of pairs discovered 
         self.grid = [] #list of list containing the cards id that are in the grid
-        self.started = False
+        self.started = False #equals True if the game started, False otherwise
         self.init_special_cards()
         self.init_game()
         self.init_grid()
-        
+    
+    #initializes the cards of the game
     def init_game(self):
-        level = self.level
+        level = self.level 
         nb_pairs = level.nb_pairs
         pairs = rd.sample(Card.THEMES[self.theme], k = nb_pairs)
         for (i,j) in pairs :
             self.cards.append(i)
             self.cards.append(j)
         rd.shuffle(self.cards)
-            
+    
+    #initializes the grid
     def init_grid(self):
         grid = []
         level = self.level
@@ -117,6 +120,7 @@ class Game :
         self.grid = grid
         self.init_special_cards
     
+    #initializes the special cards of the game
     def init_special_cards(self):
         back = self.get_back()
         if (self.level.id > 1) :
@@ -126,10 +130,12 @@ class Game :
                 card = Card.get_card_with_id(id)
                 card.back = back
                 card.theme = self.theme
-        
-    def is_finished(self): #game over if all pairs have been discovered or all attemps have been used 
+    
+    #returns True if the game is finished
+    def is_finished(self) -> bool: #game over if all pairs have been discovered or all attemps have been used 
         return (self.matched_pairs is self.level.nb_pairs, self.attempts >= self.level.max_attempts)
 
-    def get_back(self):
+    #returns the path to the back image
+    def get_back(self) -> str:
         return "DATA/IMAGES/back" + str(self.level.id) + ".png"
 
