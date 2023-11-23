@@ -52,9 +52,10 @@ def create_icanva(window, bg, w, h, x, y, image):
     can.pack(expand='Yes')
 
 
-def open_playing_window(game, window, i_variables, bg, front_images, start):
+def open_playing_window(game, window, i_variables, bg, front_images, start, frame):
     #detruire le bouton play :
     start.destroy()
+    frame.destroy()
     global image_variables
     image_variables = i_variables
     

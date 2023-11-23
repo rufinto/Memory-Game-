@@ -131,5 +131,5 @@ class Game :
         return (self.matched_pairs is self.level.nb_pairs, self.attempts >= self.level.max_attempts)
 
     def get_back(self):
-        return "IMAGES/back" + str(self.level.id) + ".png"
+        return "DATA/IMAGES/back" + str(self.level.id) + ".png"
 
