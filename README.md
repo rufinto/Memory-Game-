@@ -103,13 +103,13 @@ Le jeu doit permettre au joueur de:
 
 ## Comment lancer le MVP
 1. Positionnez vous sur la branche main.
-2. Ouvrir le dossier MVP
+2. Ouvrir le dossier MVP (se placer dedans)
 3. Exécuter le fichier main_mvp_launch.py
 
 
 ## Comment Jouer le jeu final
 
-1. Ouvrir le dossier FINAL_VERSION 
+1. Ouvrir le dossier FINAL_VERSION (se placer dedans)
 2. Lancer le jeu en exécutant le fichier main_final_launch.py
 3. Choisir les paramètres du jeu (niveau et thème)
 4. Observez les cartes et essayez de trouver des paires identiques.
