@@ -94,8 +94,8 @@ def get_options(window):
             front_images = get_front_images(game)
             i_variables = []
             i_variables.append(front_images)
-            frame = create_frame(window, '#C597FF', 400, 250, 5, 30)
-            start = add_button(frame, "PLAY", font=("Tahoma",20), bg= '#C597FF', fg='black', command = lambda : open_playing_window(game, window, i_variables, '#C597FF', front_images, start))
+            frame = create_frame(window, '#C597FF', 500, 250, 5, 30)
+            start = add_button(frame, "PLAY", font=("Tahoma",20), bg= '#C597FF', fg='black', command = lambda : open_playing_window(game, window, i_variables, '#C597FF', front_images, start, frame))
         
         frame2 = create_frame(options_window, '#C597FF', 400, 250, 5, 30)
         add_button(frame2, "Validate", font=("Tahoma",20), bg='#C597FF', fg='black', command = validate)
