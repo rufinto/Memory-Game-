@@ -1,4 +1,4 @@
-__pycache_
-vs.code
-.DS_Store
-test.py
+__pycache__
+interface
+.vscode
+.pytest_cache

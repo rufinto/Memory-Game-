@@ -33,7 +33,13 @@ def create_all_cards():  # Creation de toutes les cartes en utilisant la classe 
     back_image_path = "IMAGES/back3.png"
     for i in range(84, 150):
         front_image_path = "IMAGES/" + str(i) + ".png"
-        Card(id=i, front=front_image_path, back=back_image_path, theme=3)
+        Card(id = i, front = front_image_path, back = back_image_path, theme =3)
+    
+    #creation of special cards
+    Card(id = 200, front = "IMAGES/power1.png", back = '', theme = 0, power = 1) # +10
+    Card(id = 201, front = "IMAGES/power2.png", back = '', theme = 0, power = 2) # -5
+    Card(id = 202, front = "IMAGES/power3.png", back = '', theme = 0, power = 3) # pair
+    Card(id = 203, front = "IMAGES/power4.png", back = '', theme = 0, power = 4) #shuffle
 
     # creation of special cards
     Card(id=200, front="IMAGES/power1.png", back='', theme=0, power=1)

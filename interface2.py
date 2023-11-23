@@ -2,10 +2,10 @@ import tkinter as tk
 from tkinter import Canvas
 from tkinter import ttk
 from classes import *
-from cards import get_card_position
-from cards import get_front_images
-from cards import shuffle_cards
 from PIL import Image, ImageTk
+from cards import *
+import time
+
 import pygame
 # Initialisation de pygame pour la gestion du son
 pygame.init()
@@ -19,7 +19,6 @@ sound_right_pair = pygame.mixer.Sound("sound_right_pair.mp3")
 
 def play_sound(sound):
     pygame.mixer.Sound.play(sound)
-
 
 window_variables = []
 
@@ -60,9 +59,8 @@ def add_button(frame, text: str, font, bg: str, fg: str, command):
     frame.pack(expand="Yes")
     print("========ok boutton")
 
-
-def open_playing_window(game, window, bg: str, front_images):
-
+def open_playing_window(game, window, bg, front_images):
+    
     rows = game.level.nb_row
     columns = game.level.nb_column
     line_height = 700//rows  # hauteur de chaque ligne
@@ -71,7 +69,8 @@ def open_playing_window(game, window, bg: str, front_images):
     card = Card.get_card_with_id(game.cards[0])
     back_image = Image.open(card.back)
     back_image = ImageTk.PhotoImage(back_image)
-
+    global playing_window
+    
     playing_window = tk.Toplevel(window)
     window_variables.append(playing_window)
     playing_window.title("Game")
@@ -79,7 +78,7 @@ def open_playing_window(game, window, bg: str, front_images):
     playing_window.config(bg=bg)
 
     can = create_grid(playing_window, 700, 700, bg, rows, columns)
-
+    
     attempts_label = tk.Label(playing_window, text="", font=("Helvetica", 20))
     window_variables.append(attempts_label)
     attempts_label.pack(fill="both", expand=True)
@@ -109,9 +108,11 @@ def display_init_fronts(game, can: Canvas, playing_window, rows, columns, line_h
              back_image, attempts_label, countdown_label, playing_window))  # "<Button-1>" : clic bouton gauche
     display_attempts(game, attempts_label)
 
-
-# change la fenetre de jeu pour afficher game over or win
-def display_result(game, can, playing_window, result):
+def display_result(game, can, playing_window, result): #change la fenetre de jeu pour afficher game over or win 
+    def restart(game):
+        del(game.level)
+        del(game)
+        open_parameters_window()
     bg = '#C597FF'
     can.destroy()
     playing_window.minsize(500, 500)
@@ -119,13 +120,9 @@ def display_result(game, can, playing_window, result):
     if (result == 0):
         create_label(playing_window, "GAME OVER", ("Tahoma", 20), bg, 'white')
     if (result == 1):
-        create_label(playing_window, "WELL DONE ! YOU WON THIS GAME",
-                     ("Tahoma", 20), bg, 'white')
-    add_button(frame, "PLAY AGAIN", font=("Tahoma", 20), bg=bg,
-               fg='black', command=lambda: display_main_game_interface(game))
-    add_button(frame, "QUIT", font=("Tahoma", 20), bg=bg, fg='black',
-               command=lambda: window_variables[0].destroy())
-
+        create_label(playing_window, "WELL DONE ! YOU WON THIS GAME", ("Tahoma",20), bg, 'white' )
+    add_button(frame, "PLAY AGAIN", font=("Tahoma",20), bg=bg, fg='black', command = lambda : restart(game))
+    add_button(frame, "QUIT", font=("Tahoma",20), bg=bg, fg='black', command = lambda : window_variables[0].destroy())    
 
 def update_init_countdown(game, can, playing_window, countdown_label, attempts_label, seconds_left, images_id, back_image):
     countdown_label.config(text=str(seconds_left))
@@ -182,10 +179,27 @@ def special1_2(game, can, playing_window, countdown_label, attempts_label, i):
             countdown_label2.pack(fill="both", expand=True)
             new_timer = timer - 5
             if (new_timer <= 0):
-                return (countdown_label2, 0)
-            else:
-                return (countdown_label2, new_timer)
-        else:
+                  message_text = "Oups You lost 5 seconds...."
+                    
+                    # Créer un cadre pour encadrer le texte
+                  message_frame = tk.Frame(can, bd=5, relief=tk.SOLID)
+                  message_frame.place(relx=0.5, rely=0.5, anchor="center")
+
+                    # Créer le texte à l'intérieur du cadre
+                  message_element = tk.Label(message_frame, text=message_text, font=("Helvetica", 20), fg="black")
+                  message_element.pack(padx=10, pady=10) 
+
+                  playing_window.update()
+                  time.sleep(1)
+
+                    # Supprimer le message après 1 seconde
+                  message_frame.destroy()
+                
+                
+                  return (countdown_label2, 0)      
+            else :
+                 return (countdown_label2, new_timer)
+        else :
             return None, None
 
     def special1(playing_window, countdown_label):  # ajoute 10s au chrono
@@ -196,6 +210,21 @@ def special1_2(game, can, playing_window, countdown_label, attempts_label, i):
                 playing_window, text="", font=("Helvetica", 20))
             countdown_label2.pack(fill="both", expand=True)
             new_timer = timer + 10
+            message_text = "Youpii You won 10 seconds!!"
+                    
+                    # Créer un cadre pour encadrer le texte
+            message_frame = tk.Frame(can, bd=5, relief=tk.SOLID)
+            message_frame.place(relx=0.5, rely=0.5, anchor="center")
+
+                    # Créer le texte à l'intérieur du cadre
+            message_element = tk.Label(message_frame, text=message_text, font=("Helvetica", 20), fg="black")
+            message_element.pack(padx=10, pady=10) 
+
+            playing_window.update()
+            time.sleep(1)
+
+                    # Supprimer le message après 1 seconde
+            message_frame.destroy()
             return (countdown_label2, new_timer)
         else:
             return None, None
@@ -233,8 +262,16 @@ def special4(game, can, playing_window, images_id, front_images, countdown_label
             new_images_id[i][j] = can.create_image(
                 j*column_width + column_width/2, i*line_height + line_height/2, image=front_images[k][l])
     game.grid = new_grid
-    update_init_countdown(game, can, playing_window, countdown_label,
-                          attempts_label, 3, new_images_id, back_image)
+    message_text = "The cards have been shuffeled"
+    message_frame = tk.Frame(can, bd=5, relief=tk.SOLID)
+    message_frame.place(relx=0.5, rely=0.5, anchor="center")
+    message_element = tk.Label(message_frame, text=message_text, font=("Helvetica", 20), fg="black")
+    message_element.pack(padx=10, pady=10) 
+    playing_window.update()
+    time.sleep(1)
+    message_frame.destroy()
+    update_init_countdown(game, can , playing_window, countdown_label, attempts_label, 3, new_images_id, back_image)
+
     return new_images_id, new_front_images
 
 
@@ -252,8 +289,23 @@ def special3(game, can, images_id, list):
             game.matched_pairs += 1
             game.flipped.append(i)
             game.flipped.append(j)
-            return i, j
+            message_text = "A pair is revealed !!"
+            
+            # Créer un cadre pour encadrer le texte
+            message_frame = tk.Frame(can, bd=5, relief=tk.SOLID)
+            message_frame.place(relx=0.5, rely=0.5, anchor="center")
 
+            # Créer le texte à l'intérieur du cadre
+            message_element = tk.Label(message_frame, text=message_text, font=("Helvetica", 20), fg="black")
+            message_element.pack(padx=10, pady=10) 
+
+            playing_window.update()
+            time.sleep(1)
+
+            # Supprimer le message après 1 seconde
+            message_frame.destroy()
+
+            return i,j
 
 def on_click(game, event, can, images_id, list, line_height, column_width, back_image, attempts_label, countdown_label, playing_window):
     def get_clicked_image(event, line_height, column_width):
@@ -342,6 +394,84 @@ def create_grid(window, width, height, bg, rows, columns):  # creee un canva ave
     can.pack(expand='yes')
     return can
 
+def init_player(name,pseudo):
+    player = Player(pseudo.get())
+    name.destroy()
+    open_parameters_window()
+
+def open_pseudo_window():
+    name = tk.Tk()
+    name.minsize(600,600)
+    name.title('Choose a pseudo')
+
+    background_image = Image.open("fond1.png")  # Remplacez "votre_image.jpg" par le chemin de votre image
+    background_image = ImageTk.PhotoImage(background_image)
+
+    background_label = tk.Label(name, image=background_image)
+    background_label.place(relwidth=1, relheight=1)
+    pseudo = tk.StringVar()
+
+
+    pseudo = tk.StringVar()
+    tk.Label(name,text = 'Pseudo',font=("Tahoma",20),width=6,height=1).place(relx = 0.2, rely = 0.4, anchor = tk.CENTER)
+    pseudo = tk.Entry(name)
+    pseudo.place(relx=0.45, rely = 0.4, anchor = tk.CENTER)
+    tk.Button(name, text = 'Quit', command = name.quit,font=("Tahoma",20),width=6,height=1).place(relx=0.5, rely=0.85, anchor=tk.CENTER)
+    tk.Button(name, text = 'Confirm', command=init_player(name,pseudo),font=("Tahoma",20),width=6,height=2).place(relx = 0.8, rely = 0.4, anchor = tk.CENTER)
+    name.mainloop()
+
+def init_globale(theme_var,level_var,theme_window):
+    theme = theme_var.get()
+    print(theme)
+    game = Game(level_var,theme)
+    theme_window.destroy()
+    display_main_game_interface(game)
+
+def ShowChoice(level_window,id_level_var):
+    level_window.destroy()
+    if id_level_var.get() == 1:
+        level_var = Level(id = 1, nb_pairs = 4, nb_row = 2, nb_column = 4)
+    elif id_level_var.get() == 2:
+        level_var = Level(id = 2, nb_pairs = 7, nb_row = 4, nb_column = 4)
+    elif id_level_var.get() == 3:
+        level_var = Level(id = 3, nb_pairs = 9, nb_row = 4, nb_column = 5)
+    elif id_level_var.get() == 4:
+        level_var = Level(id = 4, nb_pairs = 11, nb_row = 4, nb_column = 6)
+    theme_window = create_window('Select a theme','#C597FF')
+    theme_var = tk.IntVar()
+    tk.Label(theme_window, text = 'Select theme',font=("Tahoma",20)).place(relx = 0.5, rely = 0.2, anchor = tk.CENTER)
+    tk.Radiobutton(theme_window,text = "assos CS",value=1,variable=theme_var,command= lambda : init_globale(theme_var,level_var,theme_window),font=("Tahoma",20)).place(relx = 0.5, rely = 0.4, anchor = tk.CENTER)
+    tk.Radiobutton(theme_window,text = "duos iconiques",value=2,variable=theme_var,command= lambda : init_globale(theme_var,level_var,theme_window),font=("Tahoma",20)).place(relx = 0.5, rely = 0.6, anchor = tk.CENTER)
+    tk.Radiobutton(theme_window,text = "géographie des monuments",value=3,variable=theme_var,command= lambda : init_globale(theme_var,level_var,theme_window),font=("Tahoma",20)).place(relx = 0.5, rely = 0.8, anchor = tk.CENTER)
+    tk.mainloop()
+
+def open_parameters_window(): 
+    level_window = create_window('Choose difficulty', '#C597FF')
+    id_level_var = tk.IntVar()
+    tk.Label(level_window, text = 'Select difficulty',font=("Tahoma",20)).place(relx = 0.5, rely = 0.2, anchor = tk.CENTER)
+    tk.Radiobutton(level_window,text = "4 paires",value=1,variable=id_level_var,command= lambda : ShowChoice(level_window,id_level_var),font=("Tahoma",20)).place(relx = 0.25, rely = 0.45, anchor = tk.CENTER)
+    tk.Radiobutton(level_window,text = "8 paires",value=2,variable=id_level_var,command= lambda : ShowChoice(level_window,id_level_var),font=("Tahoma",20)).place(relx = 0.25, rely = 0.7, anchor = tk.CENTER)
+    tk.Radiobutton(level_window,text = "10 paires",value=3,variable=id_level_var,command= lambda : ShowChoice(level_window,id_level_var),font=("Tahoma",20)).place(relx = 0.75, rely = 0.45, anchor = tk.CENTER)
+    tk.Radiobutton(level_window,text = "12 paires",value=4,variable=id_level_var,command= lambda : ShowChoice(level_window,id_level_var),font=("Tahoma",20)).place(relx = 0.75, rely = 0.7, anchor = tk.CENTER)
+    level_window.mainloop()
+
+def play():
+    window_variables[1].destroy()
+    open_parameters_window()
+
+def display_result(game, can, playing_window, result): #change la fenetre de jeu pour afficher game over or win 
+    def restart():
+        open_parameters_window()
+    bg = '#C597FF'
+    can.destroy()
+    playing_window.minsize(500,500)
+    frame = create_frame(playing_window, bg, 300, 400, 100, 200)
+    if (result == 0):
+        create_label(playing_window, "GAME OVER", ("Tahoma",20), bg, 'white' )
+    if (result == 1):
+        create_label(playing_window, "WELL DONE ! YOU WON THIS GAME", ("Tahoma",20), bg, 'white' )
+    add_button(frame, "PLAY AGAIN", font=("Tahoma",20), bg=bg, fg='black', command = lambda : restart())
+    add_button(frame, "QUIT", font=("Tahoma",20), bg=bg, fg='black', command = lambda : window_variables[0].destroy())
 
 def display_main_game_interface(game):
     if (len(window_variables) > 0):
