@@ -7,6 +7,7 @@ from PIL import Image, ImageTk
 from interface_complet import *
 
 from cards import get_front_images
+import os 
 
 OPTIONS = [0,0] #level, theme
 
@@ -37,6 +38,7 @@ def get_options(window):
     image_theme1 = tk.PhotoImage(file="DATA/IMAGES/Theme1.png")
     image_theme2 = tk.PhotoImage(file="DATA/IMAGES/Theme2.png")
     image_theme3 = tk.PhotoImage(file="DATA/IMAGES/Theme3.png")
+
 
     opt_can.image_theme1 = image_theme1
     opt_can.image_theme2 = image_theme2
