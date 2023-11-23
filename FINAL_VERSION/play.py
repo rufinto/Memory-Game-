@@ -13,7 +13,7 @@ from sounds import *
 
 OPTIONS = [0,0] #level, theme
 
-def display_main_game_interface():
+def display_main_game_interface(): #launch a game 
     if (len(window_variables) > 0):
         window_variables[0].destroy()
     bg = '#C597FF'
@@ -29,7 +29,7 @@ def display_main_game_interface():
     add_button(frame, "CHOOSE YOUR GAME OPTIONS", font=("Tahoma",20), bg=bg, fg='black', command = lambda : get_options(window))
     window.mainloop()
 
-def get_options(window):
+def get_options(window): #choice of difficulty and theme
     play_sound(sound_button)
     options_window = tk.Toplevel(window)
     options_window.title("Options")
@@ -49,13 +49,13 @@ def get_options(window):
     opt_can.image_theme3 = image_theme3
 
     opt_can.create_image(100, 150, image=image_theme1)
-    opt_can.create_text(100, 50, text="CS Associations", font=("Helvetica", 20), fill="black")
+    opt_can.create_text(100, 50, text="CS Associations", font=("Helvetica", 20), fill="black") #theme1
 
     opt_can.create_image(300, 150, image=image_theme2)
-    opt_can.create_text(300, 50, text="Cinema", font=("Helvetica", 20), fill="black")
+    opt_can.create_text(300, 50, text="Cinema", font=("Helvetica", 20), fill="black") #theme2
 
     opt_can.create_image(500, 150, image=image_theme3)
-    opt_can.create_text(500, 50, text="Geography", font=("Helvetica", 20), fill="black")
+    opt_can.create_text(500, 50, text="Geography", font=("Helvetica", 20), fill="black") #theme3
     
     opt_can.bind("<Button-1>", lambda event: on_can_click(event))
 
@@ -91,7 +91,7 @@ def get_options(window):
         level_4 = tk.Radiobutton(options_window, text="12 pairs", variable=level_var, value=4, command=on_level, bg='#C597FF')
         level_4.pack()
         
-        def validate():
+        def validate():  #validate choices so as to launch the game
             play_sound(sound_button)
             level = OPTIONS[0]
             theme = OPTIONS[1]
