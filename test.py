@@ -2,9 +2,9 @@ import tkinter as tk
 
 app = tk.Tk()
 app.minsize(400, 500)
-a = tk.Radiobutton(app, text='bouttona')
-b = tk.Radiobutton(app, text='bouttonb')
-a.deselect()
+a = tk.Radiobutton(app, text='bouttona', command=lambda: print("a"); app.destroy())
+b = tk.Radiobutton(app, text='bouttonb', command=lambda: print("b"))
+#a.deselect()
 a.pack()
 b.pack()
 app.mainloop()
