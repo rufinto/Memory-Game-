@@ -83,9 +83,11 @@ def open_playing_window(game, window, i_variables, bg, front_images, start, fram
     
     can = create_grid(playing_window, 700, 700, bg, rows, columns)
     
+    #we display the number of attempts left in attempts_label :
     attempts_label = tk.Label(playing_window, text="", font=("Helvetica", 20))
-    window_variables.append(attempts_label)
-    attempts_label.pack(fill = "both", expand=True)     
+    #window_variables.append(attempts_label)
+    attempts_label.pack(fill = "both", expand=True)
+    #we display a timer in countdown_label :
     countdown_label = tk.Label(playing_window, text="", font=("Helvetica", 20))
     countdown_label.pack(fill = "both", expand=True)
     

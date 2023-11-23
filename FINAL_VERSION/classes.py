@@ -40,7 +40,7 @@ class Card :
     def is_flipped(self) -> bool:
         return self.flipped is True
     
-    #returns True if the card is flipped 
+    #change the value of the attribut flipped
     def flip(self) -> None:
         self.flipped = not self.flipped
     
@@ -80,7 +80,7 @@ class Level :
         self.nb_row = nb_row
         self.nb_column = nb_column
         self.timer = 40*self.id #time the player has before losing the game 
-        self.max_attempts = 4*nb_pairs #maximum number of attempts for this level
+        self.max_attempts = 5*nb_pairs #maximum number of attempts for this level
     
 class Game :
     def __init__(self, level : Level, theme):
@@ -138,4 +138,3 @@ class Game :
     #returns the path to the back image
     def get_back(self) -> str:
         return "DATA/IMAGES/back" + str(self.level.id) + ".png"
-
