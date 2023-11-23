@@ -9,7 +9,11 @@ Le jeu Memory est une excellente façon d'exercer votre mémoire tout en vous am
 
 Le jeu doit se lancer avec le bon nombre de paires retournées et placées aléatoirement sur la grille. Au début du jeu, les cartes sont affichées pendant 5 secondes avant d'être cachées. Le joueur doit pouvoir sélectionner la carte qu'il veut retourner en cliquant dessus. Le joueur doit retourner deux cartes à la suite, si les deux cartes constituent une paire (un point est gagné) les cartes restent retournées. Sinon, les deux cartes redeviennt cachées, le joueur ne gagne pas de point. Le jeu se termine lorsque toutes les cartes sont retournées.
 
-## Organisation du Mini-Projet
+## Organisation du Projet
+
+### Structure du projet (main)
+- MVP: ce dossier contient les classes et les packages nécessaires au lancement du jeu à travers le fichier main_mvp_launch.py. Il contient aussi les différentes images dans un dossier nommé DATA_MVP.
+- FINAL_VERSION: ce dossier contient les classes et les packages nécessaires au lancement du jeu à travers le fichier main_final_launch.py. Il contient aussi les différentes images et les sons dans un dossier nommé DATA.
 
 ### Objectif 1 (MVP): Un jeu Memory Minimum
 
@@ -62,7 +66,7 @@ Le jeu doit permettre au joueur de:
 2. Change to the project directory:
 
     ```bash
-    cd memory
+    cd groupe12_memory
     ```
 
 3. Install dependencies:
@@ -74,12 +78,20 @@ Le jeu doit permettre au joueur de:
     pip install pygame
     ```
 
-## Comment Jouer
+## Comment lancer le MVP
+1. Positionnez vous sur la branche main.
+2. Ouvrir le dossier MVP
+3. Exécuter le fichier main_mvp_launch.py
 
-1. Lancez le jeu en exécutant le fichier main.py
-2. Observez les cartes et essayez de trouver des paires identiques.
-3. Cliquez sur deux cartes pour les retourner. Si elles sont identiques, elles resteront visibles.
-4. Continuez à tourner les cartes jusqu'à ce que toutes les paires soient trouvées.
+
+## Comment Jouer le jeu final
+
+1. Ouvrir le dossier FINAL_VERSION 
+2. Lancer le jeu en exécutant le fichier main_final_launch.py
+3. Choisir les paramètres du jeu (niveau et thème)
+4. Observez les cartes et essayez de trouver des paires identiques.
+5. Cliquez sur deux cartes pour les retourner. Si elles sont identiques, elles resteront visibles.
+6. Continuez à tourner les cartes jusqu'à ce que toutes les paires soient trouvées. Faites attention au chronomètre et au nombre d'essais maximal.
 
 
 
